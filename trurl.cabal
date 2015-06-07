@@ -21,5 +21,10 @@ executable trurl
   -- other-modules:       
   -- other-extensions:    
   build-depends:       base >=4.7 && <4.8
+                     , http-conduit
+                     , directory
+                     , bytestring
+                     , text
+                     , tar
   -- hs-source-dirs:      
   default-language:    Haskell2010

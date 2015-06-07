@@ -1,15 +1,37 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 import System.Environment
+import System.Directory
+import Network.HTTP.Conduit
+import Codec.Archive.Tar
 
-mainRepo = "https://github.com/dbushenko/trurl/raw/master/repository/main.tar"
+import qualified Data.ByteString.Lazy as L
+
+mainRepoFile :: String
+mainRepoFile = "main.tar"
+
+mainRepo :: String
+mainRepo = "https://github.com/dbushenko/trurl/raw/master/repository/" ++ mainRepoFile
+
+getLocalRepoDir :: IO String
+getLocalRepoDir = do
+  home <- getHomeDirectory
+  return $ home ++ "/.trurl/repo/"
+  
 
 -- Команда "update"
--- 1) Забрать из репозитория свежий tar-архив с апдейтами
--- 2) Распаковать его в $HOME/.trurl/repo
+-- 1) Создать $HOME/.trurl/repo
+-- 2) Забрать из репозитория свежий tar-архив с апдейтами
+-- 3) Распаковать его в $HOME/.trurl/repo
 
 updateFromRepository :: IO ()
-updateFromRepository = return ()
+updateFromRepository = do
+  repoDir <- getLocalRepoDir
+  createDirectoryIfMissing True repoDir
+  let tarFile = repoDir ++ mainRepoFile
+  simpleHttp mainRepo >>= L.writeFile tarFile
+  extract repoDir tarFile
+  removeFile tarFile
 
 
 -- Команда "create <project> <name>"
