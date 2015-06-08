@@ -11,7 +11,7 @@ import Text.Hastache.Context
 import Data.Aeson
 import Data.Maybe
 import Data.Scientific
-import Debug.Trace
+import Data.String.Utils
 
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
@@ -106,15 +106,26 @@ newTemplate templateName paramsStr = do
   generated <- hastacheStr defaultConfig template (mkStrContext (mkContext paramsStr))
   TL.writeFile (getFileName templateName) generated
 
--- Хорошо бы сделать еще команду "list".
--- Для каждой команды должен быть файл с metainfo, по команде list будет выводиться
--- содержимое именно этих файлов
+printFile :: FilePath -> FilePath -> IO ()
+printFile dir fp = do
+  file <- readFile (dir ++ fp)
+  putStrLn file 
+
+listTemplates :: IO ()
+listTemplates = do
+  repoDir <- getLocalRepoDir
+  files <- getDirectoryContents repoDir
+  let mpaths = filter (endswith ".metainfo") files
+  mapM_ (printFile repoDir) mpaths
+  return ()
+
 help :: IO ()
 help = do
   putStrLn "trurl <command> [parameters]"
   putStrLn "  update -- fetch the updates from repository"
   putStrLn "  create <project_type> <name> -- create project of specified type with specified name"
   putStrLn "  new <template> <parameters_string> -- create file from the template with specified parameters, wrap it with \"\""
+  putStrLn "  list -- print all available templates"
   putStrLn "  help -- print this help"
   
 
@@ -127,4 +138,5 @@ main = do
     ["update"]                -> updateFromRepository
     ["create", project, name] -> createProject project name
     ["new", template, params] -> newTemplate template params
+    ["list"]                  -> listTemplates
     _                         -> putStrLn "Unknown command"
