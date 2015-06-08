@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+import GHC.Exts
 import System.Environment
 import System.Directory
 import Network.HTTP.Conduit
@@ -10,6 +11,7 @@ import Text.Hastache.Context
 import Data.Aeson
 import Data.Maybe
 import Data.Scientific
+import Debug.Trace
 
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
@@ -71,7 +73,7 @@ getFileName template = do
 getFullFileName :: String -> String -> String
 getFullFileName repoDir template = repoDir ++ (getFileName template)
 
-mkVariable :: Maybe Value -> MuType m
+mkVariable :: Monad m => Maybe Value -> MuType m
 mkVariable (Just (String s)) = MuVariable s
 mkVariable (Just (Bool b)) = MuBool b
 mkVariable (Just (Number n)) = let e = floatingOrInteger n
@@ -79,20 +81,18 @@ mkVariable (Just (Number n)) = let e = floatingOrInteger n
                                    mkval (Right i) = MuVariable (i :: Integer)
                                in mkval e
 
-
--- mkVariable (Just (Array ar)) = MuList $ map (mkStrContext . aesonContext . Just) (toList ar)
-mkVariable (Just (Array _)) = MuVariable ("" :: String)
-mkVariable (Just (Object _)) = MuVariable ("" :: String)
+mkVariable (Just (Array ar)) = MuList $ map (mkStrContext . aesonContext . Just) (toList ar)
+mkVariable (Just o@(Object _)) = MuList [(mkStrContext (aesonContext (Just o)))]
 mkVariable (Just Null) = MuVariable ("" :: String)                               
 mkVariable Nothing = MuVariable ("" :: String)
 
-aesonContext :: Maybe Value -> String -> MuType m
+aesonContext :: Monad m => Maybe Value -> String -> MuType m
 aesonContext mobj = \k -> let obj = fromJust mobj
                               Object o = obj
                               v = HM.lookup (T.pack k) o
-                         in mkVariable v
+                           in mkVariable v
 
-mkContext :: String -> (String -> MuType m)
+mkContext :: Monad m => String -> (String -> MuType m)
 mkContext paramsStr =
   let mobj = decode (BLC8.pack paramsStr) :: Maybe Value
   in if (isNothing mobj) then \_ -> MuVariable ("" :: String)
