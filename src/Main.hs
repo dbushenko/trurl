@@ -111,21 +111,31 @@ printFile dir fp = do
   file <- readFile (dir ++ fp)
   putStrLn file 
 
+printFileHeader :: FilePath -> FilePath -> IO ()
+printFileHeader dir fp = do
+  file <- readFile (dir ++ fp)
+  putStrLn $ head $ split "\n" file
+
 listTemplates :: IO ()
 listTemplates = do
   repoDir <- getLocalRepoDir
   files <- getDirectoryContents repoDir
   let mpaths = filter (endswith ".metainfo") files
-  mapM_ (printFile repoDir) mpaths
-  return ()
+  mapM_ (printFileHeader repoDir) mpaths
+
+helpTemplate :: String -> IO ()
+helpTemplate template = do
+  repoDir <- getLocalRepoDir
+  printFile repoDir template
 
 help :: IO ()
 help = do
   putStrLn "trurl <command> [parameters]"
   putStrLn "  update -- fetch the updates from repository"
-  putStrLn "  create <project_type> <name> -- create project of specified type with specified name"
+  putStrLn "  create <project_template> <name> -- create project of specified type with specified name"
   putStrLn "  new <template> <parameters_string> -- create file from the template with specified parameters, wrap it with \"\""
   putStrLn "  list -- print all available templates"
+  putStrLn "  help <template> -- print this help"
   putStrLn "  help -- print this help"
   
 
@@ -135,6 +145,7 @@ main = do
   case args of
     []                        -> help
     ["help"]                  -> help
+    ["help", template]        -> helpTemplate template
     ["update"]                -> updateFromRepository
     ["create", project, name] -> createProject project name
     ["new", template, params] -> newTemplate template params
