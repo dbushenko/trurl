@@ -72,7 +72,8 @@ value1
 All the templates are stored in $HOME/.trurl/repo. There are two types of templates: projects and files.
 
 * Project template is just a tar archive which is unpacked in specified directory.
-* File template is a file in Mustache format. It may have any extension, but if not supplied while runnint 'trurl new ...' then extension '.hs' will be used.
+* File template is a file in Mustache format. It may have any extension, but if not supplied while running 'trurl new ...' then extension '.hs' will be used.
+
 
 Info about each template is stored in corresponding metainfo file. E.g. if there is template 'file1.hs' then should be also 'file1.hs.metainfo'. First line of the metainfo file is its short description printed by the 'list' command.
 
