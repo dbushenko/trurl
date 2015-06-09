@@ -67,12 +67,12 @@ createProject project name = do
 -- 4) Записать файл в ./
 
 getFileName :: String -> String
-getFileName template = do
-  if (isInfixOf "." template) then template
+getFileName template =
+  if "." `isInfixOf` template then template
   else template ++ ".hs"
 
 getFullFileName :: String -> String -> String
-getFullFileName repoDir template = repoDir ++ (getFileName template)
+getFullFileName repoDir template = repoDir ++ getFileName template
 
 mkVariable :: Monad m => Maybe Value -> MuType m
 mkVariable (Just (String s)) = MuVariable s
@@ -83,20 +83,20 @@ mkVariable (Just (Number n)) = let e = floatingOrInteger n
                                in mkval e
 
 mkVariable (Just (Array ar)) = MuList $ map (mkStrContext . aesonContext . Just) (toList ar)
-mkVariable (Just o@(Object _)) = MuList [(mkStrContext (aesonContext (Just o)))]
+mkVariable (Just o@(Object _)) = MuList [ mkStrContext $ aesonContext $ Just o ]
 mkVariable (Just Null) = MuVariable ("" :: String)                               
 mkVariable Nothing = MuVariable ("" :: String)
 
 aesonContext :: Monad m => Maybe Value -> String -> MuType m
-aesonContext mobj = \k -> let obj = fromJust mobj
-                              Object o = obj
-                              v = HM.lookup (T.pack k) o
-                           in mkVariable v
+aesonContext mobj k = let obj = fromJust mobj
+                          Object o = obj
+                          v = HM.lookup (T.pack k) o
+                      in mkVariable v
 
-mkContext :: Monad m => String -> (String -> MuType m)
+mkContext :: Monad m => String -> String -> MuType m
 mkContext paramsStr =
   let mobj = decode (BLC8.pack paramsStr) :: Maybe Value
-  in if (isNothing mobj) then \_ -> MuVariable ("" :: String)
+  in if isNothing mobj then \_ -> MuVariable ("" :: String)
      else aesonContext mobj
 
 newTemplate :: String -> String -> IO ()
