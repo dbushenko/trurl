@@ -6,7 +6,7 @@ Accepts following parameters:
  "props": [          -- the entity properties
  {"name": "some_name", -- entity field name
   "type": "some_type", -- entity field type
-  "last": true/false   -- set it to 'true' on the last elements, skip on others
+  "last": true/false   -- set it to 'true' on the last element, skip on others
  ]
 }
 

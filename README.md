@@ -24,7 +24,7 @@ Just run 'trurl' to see the help:
 
     trurl <command> [parameters]
       update -- fetch the updates from repository
-      create <project_template> <name> -- create project of specified type with specified name
+      create <name> <project_template> -- create project of specified type with specified name
       new <name> <template> <parameters_string> -- create file from the template with specified parameters, wrap it with ""
       list -- print all available templates
       help <template> -- print template info

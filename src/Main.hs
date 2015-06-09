@@ -9,7 +9,7 @@ help :: IO ()
 help = do
   putStrLn "trurl <command> [parameters]"
   putStrLn "  update -- fetch the updates from repository"
-  putStrLn "  create <project_template> <name> -- create project of specified type with specified name"
+  putStrLn "  create <name> <project_template> -- create project of specified type with specified name"
   putStrLn "  new <name> <template> <parameters_string> -- create file from the template with specified parameters, wrap it with \"\""
   putStrLn "  list -- print all available templates"
   putStrLn "  help <template> -- print template info"
@@ -23,7 +23,7 @@ main = do
     ["help"]                        -> help
     ["help", template]              -> helpTemplate template
     ["update"]                      -> updateFromRepository
-    ["create", project, name]       -> createProject project name
+    ["create", name, project]       -> createProject name project
     ["new", name, template, params] -> newTemplate name template params
     ["list"]                        -> listTemplates
     _                               -> putStrLn "Unknown command"

@@ -14,7 +14,7 @@ import Data.Pool(Pool)
 import Data.Text.Lazy.Encoding
 import qualified Data.ByteString.Lazy.Char8 as BL
 
-data {{Name}} = {{Name}} Integer Text Text
+data {{Name}} = {{Name}} Integer{{#props}} {{type}}{{/props}}
      deriving (Show)
 
 instance FromJSON {{Name}} where
@@ -26,7 +26,7 @@ instance FromJSON {{Name}} where
 
 instance ToJSON {{Name}} where
      toJSON ({{Name}} aid {{#props}}{{name}} {{/props}}) =
-         object [{{#props}}"{{name}}" .= {{name}}
+         object [{{#props}}"{{name}}" .= {{name}},
                  {{/props}}
 "id" .= aid]                 
 
@@ -34,7 +34,7 @@ instance ToJSON {{Name}} where
 list{{Name}}s :: Pool Connection -> IO [{{Name}}]
 list{{Name}}s pool = do
      res <- fetchSimple pool "SELECT * FROM {{Name}} ORDER BY id DESC" :: IO [(Integer{{#props}}, {{type}}{{/props}})]
-     return $ fmap (\(aid{{#props}}, {{name}}{{/props}}) -> {{Name}} aid{{#props}}, {{name}}{{/props}}) res
+     return $ fmap (\(aid{{#props}}, {{name}}{{/props}}) -> {{Name}} aid{{#props}} {{name}}{{/props}}) res
    
 find{{Name}} :: Pool Connection -> Text -> IO (Maybe {{Name}})
 find{{Name}} pool aid = do
@@ -47,13 +47,13 @@ find{{Name}} pool aid = do
 insert{{Name}} :: Pool Connection -> Maybe {{Name}} -> ActionT Text IO ()
 insert{{Name}} _ Nothing = return ()
 insert{{Name}} pool (Just ({{Name}} _ {{#props}} {{name}}{{/props}})) = do
-     liftIO $ execSqlT pool [title, bodyText] "INSERT INTO {{Name}}({{#props}}{{name}}{{^last}}, {{/last}}{{/props}}) VALUES({{#props}}?{{^last}},{{/last}}{{/props}})"
+     liftIO $ execSqlT pool [{{#props}}(show {{name}}){{^last}}, {{/last}}{{/props}}] "INSERT INTO {{Name}}({{#props}}{{name}}{{^last}}, {{/last}}{{/props}}) VALUES({{#props}}?{{^last}},{{/last}}{{/props}})"
      return ()
 
 update{{Name}} :: Pool Connection -> Maybe {{Name}} -> ActionT Text IO ()
 update{{Name}} _ Nothing = return ()
 update{{Name}} pool (Just ({{Name}} aid{{#props}} {{name}}{{/props}})) = do
-     liftIO $ execSqlT pool [{{#props}}{{name}}, {{/props}}(decodeUtf8 $ BL.pack $ show aid)]
+     liftIO $ execSqlT pool [{{#props}}(show {{name}}), {{/props}}(show $ decodeUtf8 $ BL.pack $ show aid)]
                             "UPDATE {{Name}} SET {{#props}}{{name}}=?{{^last}},{{/last}} {{/props}}WHERE id=?"
      return ()
 

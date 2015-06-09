@@ -68,7 +68,7 @@ main = do
 
 -----------------------------------------------
 
--- Parse the request body into the Article
-getArticleParam :: ActionT TL.Text IO (Maybe Article)
+-- Parse the request body into the JSON object
+getArticleParam :: FromJSON t => ActionT TL.Text IO (Maybe t)
 getArticleParam = do b <- body
-                     return (decode b :: Maybe Article)
+                     return (decode b :: FromJSON t => Maybe t)

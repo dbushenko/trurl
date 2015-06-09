@@ -54,7 +54,7 @@ updateFromRepository = do
 -- 3) Распаковать в ./name содержимое project.tar
 
 createProject :: String -> String -> IO ()
-createProject project name = do
+createProject name project = do
   repoDir <- getLocalRepoDir
   createDirectoryIfMissing True name
   extract name $ repoDir ++ project ++ ".tar"
