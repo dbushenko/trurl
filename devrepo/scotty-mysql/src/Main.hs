@@ -52,12 +52,12 @@ main = do
                                          viewArticle maybeArticle            -- show the article if it was found
 
               -- CREATE
-              post  "/admin/articles" $ do article <- getArticleParam -- read the request body, try to parse it into article
+              post  "/admin/articles" $ do article <- getEntityParam  -- read the request body, try to parse it into article
                                            insertArticle pool article -- insert the parsed article into the DB
                                            createdArticle article     -- show info that the article was created
 
               -- UPDATE
-              put   "/admin/articles" $ do article <- getArticleParam -- read the request body, try to parse it into article
+              put   "/admin/articles" $ do article <- getEntityParam  -- read the request body, try to parse it into article
                                            updateArticle pool article -- update parsed article in the DB
                                            updatedArticle article     -- show info that the article was updated
 
@@ -69,6 +69,6 @@ main = do
 -----------------------------------------------
 
 -- Parse the request body into the JSON object
-getArticleParam :: FromJSON t => ActionT TL.Text IO (Maybe t)
-getArticleParam = do b <- body
-                     return (decode b :: FromJSON t => Maybe t)
+getEntityParam :: FromJSON t => ActionT TL.Text IO (Maybe t)
+getEntityParam = do b <- body
+                    return (decode b :: FromJSON t => Maybe t)
