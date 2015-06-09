@@ -12,7 +12,7 @@ help = do
   putStrLn "  create <project_template> <name> -- create project of specified type with specified name"
   putStrLn "  new <template> <parameters_string> -- create file from the template with specified parameters, wrap it with \"\""
   putStrLn "  list -- print all available templates"
-  putStrLn "  help <template> -- print this help"
+  putStrLn "  help <template> -- print template info"
   putStrLn "  help -- print this help"
   
 main :: IO ()
