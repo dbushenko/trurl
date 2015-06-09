@@ -25,7 +25,7 @@ Just run 'trurl' to see the help:
     trurl <command> [parameters]
       update -- fetch the updates from repository
       create <project_template> <name> -- create project of specified type with specified name
-      new <template> <parameters_string> -- create file from the template with specified parameters, wrap it with ""
+      new <name> <template> <parameters_string> -- create file from the template with specified parameters, wrap it with ""
       list -- print all available templates
       help <template> -- print template info
       help -- print this help
@@ -34,7 +34,7 @@ Just run 'trurl' to see the help:
 * Command 'list' shows available templates. Technically it finds all the files *.metainfo in $HOME/.trurl/repo and prints thir first lines.
 * Command 'help <template>' prints detailed info about the template.
 * Command 'create' intended to generate projects, just specify an available project template name.
-* Command 'new' generates template file. It uses Mustache format in templates and accepts parameters in JSON format.
+* Command 'new' generates template file, generated file will be named as specified in 'name'. It uses Mustache format in templates and accepts parameters in JSON format.
 
 For example, if there is a template file 'file1.txt' with following contents:
 

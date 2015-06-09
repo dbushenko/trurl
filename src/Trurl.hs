@@ -99,13 +99,13 @@ mkContext paramsStr =
   in if isNothing mobj then \_ -> MuVariable ("" :: String)
      else aesonContext mobj
 
-newTemplate :: String -> String -> IO ()
-newTemplate templateName paramsStr = do
+newTemplate :: String -> String -> String -> IO ()
+newTemplate name templateName paramsStr = do
   repoDir <- getLocalRepoDir
   let templPath = getFullFileName repoDir templateName
   template <- T.readFile templPath
   generated <- hastacheStr defaultConfig template (mkStrContext (mkContext paramsStr))
-  TL.writeFile (getFileName templateName) generated
+  TL.writeFile (getFileName name) generated
 
 printFile :: FilePath -> FilePath -> IO ()
 printFile dir fp = do
@@ -127,4 +127,4 @@ listTemplates = do
 helpTemplate :: String -> IO ()
 helpTemplate template = do
   repoDir <- getLocalRepoDir
-  printFile repoDir template
+  printFile repoDir ((getFileName template) ++ ".metainfo")

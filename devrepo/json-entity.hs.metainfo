@@ -1,0 +1,16 @@
+json-entity -- generates json entity for the scotty JSON server.
+
+Accepts following parameters:
+
+{"Name": "Entity",   -- the entity name
+ "props": [          -- the entity properties
+ {"name": "some_name", -- entity field name
+  "type": "some_type", -- entity field type
+  "last": true/false   -- set it to 'true' on the last elements, skip on others
+ ]
+}
+
+Important: field 'id' is generated automatically.
+
+Example:
+trurl new Book json-entity '{"Name":"Book","props":[{"name":"cover","type":"Text"},{"name":"year","type":"Integer","last":true}]}'
