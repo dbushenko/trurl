@@ -4,12 +4,15 @@
 module Db where
 
 import GHC.Generics (Generic)
-import qualified Database.MySQL.Base as M
+import Control.Monad.IO.Class
 import Database.MySQL.Simple
 import Database.MySQL.Simple.QueryResults
 import Database.MySQL.Simple.QueryParams
 import Data.Pool(Pool, withResource)
+import Data.String.Utils
 import GHC.Int
+
+import qualified Database.MySQL.Base as M
 
 -- DbConfig contains info needed to connect to MySQL server
 data DbConfig = DbConfig {
@@ -67,3 +70,19 @@ execSqlT pool args sql = withResource pool ins
        where ins conn = withTransaction conn $ execute conn sql args
 
 --------------------------------------------------------------------------------
+
+newtype Role = Role String
+  deriving (Eq, Ord, Read, Show)
+  
+data User = User Integer String String [Role]
+  deriving (Eq, Ord, Read, Show)
+
+
+userFromDb :: [(Integer, String, String, String)] -> Maybe User
+userFromDb [(uid, login, pwd, roles)] = Just $ User uid login pwd (map Role (split "," roles))
+userFromDb _ = Nothing
+
+findUserByLogin :: Pool Connection -> String -> IO (Maybe User)
+findUserByLogin pool login = do
+         res <- liftIO $ fetch pool (Only login) "SELECT * FROM users WHERE login=?" :: IO [(Integer, String, String, String)]
+         return $ userFromDb res

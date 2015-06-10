@@ -8,16 +8,22 @@ import Article
 
 import Web.Scotty
 import Web.Scotty.Internal.Types (ActionT)
+import Network.Wai
+import Network.Wai.Middleware.HttpAuth
 import Network.Wai.Middleware.Static
 import Network.Wai.Middleware.RequestLogger (logStdoutDev, logStdout)
 import Control.Applicative
 import Control.Monad.IO.Class
+import Database.MySQL.Simple
+import Data.Pool(createPool, Pool)
+import Data.Aeson
+import Data.Hash.MD5
+
+import qualified Data.Text.Lazy as TL
 import qualified Data.Configurator as C
 import qualified Data.Configurator.Types as C
-import Database.MySQL.Simple
-import Data.Pool(createPool)
-import qualified Data.Text.Lazy as TL
-import Data.Aeson
+import qualified Data.ByteString as B
+import qualified Data.ByteString.Char8 as BC
 
 -- Parse file "application.conf" and get the DB connection info
 makeDbConfig :: C.Config -> IO (Maybe Db.DbConfig)
@@ -28,6 +34,23 @@ makeDbConfig conf = do
   return $ DbConfig <$> name
                     <*> user
                     <*> password
+
+-- The function knows which resources are available only for the
+-- authenticated users
+protectedResources :: Request -> IO Bool
+protectedResources req = do
+    let path = pathInfo req
+    return $ protect path
+    where protect (p : _) =  p == "admin"  -- all requests to /admin/* should be authenticated
+          protect _       =  False         -- other requests are allowed for anonymous users
+
+
+verifyCredentials :: Pool Connection -> B.ByteString -> B.ByteString -> IO Bool
+verifyCredentials pool user password = do
+   maybeUser <- findUserByLogin pool (BC.unpack user)
+   return $ comparePasswords maybeUser (BC.unpack password)
+   where comparePasswords Nothing _ = False
+         comparePasswords (Just (User _ _ pwd _)) passwordStr =  pwd == (md5s $ Str passwordStr)
 
 main :: IO ()
 main = do
@@ -41,6 +64,8 @@ main = do
           scotty 3000 $ do
               middleware $ staticPolicy (noDots >-> addBase "static") -- serve static files
               middleware logStdout                                    -- log all requests; for production use logStdout
+              middleware $ basicAuth (verifyCredentials pool)         -- check if the user is authenticated for protected resources
+                           "Haskell Blog Realm" { authIsProtected = protectedResources } -- function which restricts access to some routes only for authenticated users
 
               -- LIST
               get   "/articles" $ do articles <- liftIO $ listArticles pool  -- get the ist of articles for DB
