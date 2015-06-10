@@ -1,4 +1,4 @@
-json-entity -- generates json entity for the scotty JSON server.
+scotty-entity -- generates json entity for the scotty JSON server.
 
 Accepts following parameters:
 
