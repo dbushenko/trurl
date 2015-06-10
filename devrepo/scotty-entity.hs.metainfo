@@ -1,4 +1,4 @@
-scotty-entity -- generates json entity for the scotty JSON server.
+scotty-entity -- [new] generates json entity for the scotty JSON REST-server.
 
 Accepts following parameters:
 
