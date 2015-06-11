@@ -30,6 +30,7 @@ library
                      , scientific
                      , unordered-containers
                      , MissingH
+                     , filemanip
                      
   default-language:    Haskell2010
 
