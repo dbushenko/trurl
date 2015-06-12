@@ -124,8 +124,8 @@ createProject name project paramsStr = do
   repoDir <- getLocalRepoDir
   createDirectoryIfMissing True name
   extract name $ repoDir ++ project ++ ".tar"
-  paths <- find always (extension ==? templateExt) name
-  mapM_ (processTemplate name paramsStr) paths
+  templatePaths <- find always (extension ==? templateExt) name
+  mapM_ (processTemplate name paramsStr) templatePaths
 
 -- Команда "new <file> <parameters>"
 -- 1) Найти в $HOME/.trurl/repo архив с именем file.hs.
