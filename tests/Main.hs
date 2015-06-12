@@ -28,25 +28,25 @@ unitTests = testGroup "Unit tests"
 
   , testCase "mkContext empty" $ do
       generated <- hastacheStr defaultConfig "" (mkStrContext (T.mkContext "{\"a\":11}"))
-      assertEqual "Checking generated text" generated ""
+      assertEqual "Checking generated text" "" generated
 
   , testCase "mkContext simple object" $ do
       generated <- hastacheStr defaultConfig "{{a}}" (mkStrContext (T.mkContext "{\"a\":11}"))
-      assertEqual "Checking generated text" generated "11"
+      assertEqual "Checking generated text" "11" generated
 
   , testCase "mkContext complex object" $ do
       generated <- hastacheStr defaultConfig "{{a}}-{{b}}" (mkStrContext (T.mkContext "{\"a\":11,\"b\":\"abc\"}"))
-      assertEqual "Checking generated text" generated "11-abc"
+      assertEqual "Checking generated text" "11-abc" generated
 
   , testCase "mkContext complex array" $ do
       generated <- hastacheStr defaultConfig "{{#abc}}{{name}}{{/abc}}" (mkStrContext (T.mkContext "{\"abc\":[{\"name\":\"1\"},{\"name\":\"2\"},{\"name\":\"3\"}]}"))
-      assertEqual "Checking generated text" generated "123"
+      assertEqual "Checking generated text" "123" generated
 
   , testCase "mkContext nested object" $ do
       generated <- hastacheStr defaultConfig "{{#abc}}{{name}}{{/abc}}" (mkStrContext (T.mkContext "{\"abc\":{\"name\":\"1\"}}"))
-      assertEqual "Checking generated text" generated "1"
+      assertEqual "Checking generated text" "1" generated
 
   , testCase "mkProjContext for empty params" $ do
       generated <- hastacheStr defaultConfig "{{projectName}}" (mkStrContext (T.mkProjContext "abc" "{}"))
-      assertEqual "Checking generated text" generated "abc"
+      assertEqual "Checking generated text" "abc" generated
   ]

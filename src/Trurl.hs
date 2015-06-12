@@ -91,8 +91,8 @@ mkContext paramsStr =
      else aesonContext mobj
 
 mkProjContext :: Monad m => String -> String -> String -> MuType m
-mkProjContext projName _         "projName" = MuVariable projName
-mkProjContext _        paramsStr key        = mkContext paramsStr key
+mkProjContext projName _ "projectName" = MuVariable projName
+mkProjContext _ paramsStr key          = mkContext paramsStr key
 
 -------------------------------------
 -- API
