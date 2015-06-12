@@ -30,6 +30,10 @@ unitTests = testGroup "Unit tests"
       generated <- hastacheStr defaultConfig "" (mkStrContext (T.mkContext "{\"a\":11}"))
       assertEqual "Checking generated text" "" generated
 
+  , testCase "mkContext absent variable" $ do
+      generated <- hastacheStr defaultConfig "{{b}}" (mkStrContext (T.mkContext "{\"a\":11}"))
+      assertEqual "Checking generated text" "" generated
+
   , testCase "mkContext simple object" $ do
       generated <- hastacheStr defaultConfig "{{a}}" (mkStrContext (T.mkContext "{\"a\":11}"))
       assertEqual "Checking generated text" "11" generated
