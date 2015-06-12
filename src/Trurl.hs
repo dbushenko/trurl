@@ -91,10 +91,8 @@ mkContext paramsStr =
      else aesonContext mobj
 
 mkProjContext :: Monad m => String -> String -> String -> MuType m
-mkProjContext projName paramsStr key =
-  let ctx = mkContext paramsStr
-  in if key == "projectName" then MuVariable projName
-     else ctx key
+mkProjContext projName _         "projName" = MuVariable projName
+mkProjContext _        paramsStr key        = mkContext paramsStr key
 
 -------------------------------------
 -- API
