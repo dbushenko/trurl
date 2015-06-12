@@ -12,6 +12,9 @@ Build it from source using cabal:
 
     git clone https://github.com/dbushenko/trurl.git
     cd trurl
+    cabal sandbox init
+    cabal install --dependencies-only
+    cabal build
     cabal install
 
 Or install it from the repository:
@@ -24,7 +27,7 @@ Just run 'trurl' to see the help:
 
     trurl <command> [parameters]
       update -- fetch the updates from repository
-      create <name> <project_template> -- create project of specified type with specified name
+      create <name> <project_template> [parameters_string] -- create project of specified type with specified name
       new <name> <template> <parameters_string> -- create file from the template with specified parameters, wrap it with ""
       list -- print all available templates
       help <template> -- print template info
@@ -33,7 +36,7 @@ Just run 'trurl' to see the help:
 * Command 'update' fetches all the latest templates from the repository. Run it before using any other command.
 * Command 'list' shows available templates. Technically it finds all the files *.metainfo in $HOME/.trurl/repo and prints thir first lines.
 * Command 'help <template>' prints detailed info about the template.
-* Command 'create' intended to generate projects, just specify an available project template name.
+* Command 'create' intended to generate projects, just specify an available project template name. You may also sepcify parameters in JSON format. In any case at least one parameter will be available in project template -- 'projectName' which corresponds to the provided <name> parameter.
 * Command 'new' generates template file, generated file will be named as specified in 'name'. It uses Mustache format in templates and accepts parameters in JSON format.
 
 For example, if there is a template file 'file1.txt' with following contents:
@@ -71,7 +74,7 @@ value1
 
 All the templates are stored in $HOME/.trurl/repo. There are two types of templates: projects and files.
 
-* Project template is just a tar archive which is unpacked in specified directory.
+* Project template is just a tar archive which is unpacked in specified directory. Template files should have extension '.template' and use the same mustache syntax as templates for command 'new'.
 * File template is a file in Mustache format. It may have any extension, but if not supplied while running 'trurl new ...' then extension '.hs' will be used.
 
 

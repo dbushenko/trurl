@@ -9,7 +9,7 @@ help :: IO ()
 help = do
   putStrLn "trurl <command> [parameters]"
   putStrLn "  update -- fetch the updates from repository"
-  putStrLn "  create <name> <project_template> [parameters_string] -- create project of specified type with specified name"
+  putStrLn "  create <name> <project_template> [parameters_string] -- create project of specified type with specified name; optionally add JSON parameters"
   putStrLn "  new <name> <template> [parameters_string] -- create file from the template with specified parameters, wrap it with \"\""
   putStrLn "  list -- print all available templates"
   putStrLn "  help <template> -- print template info"
