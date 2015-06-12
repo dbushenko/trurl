@@ -65,23 +65,22 @@ getFileName template =
 getFullFileName :: String -> String -> String
 getFullFileName repoDir template = repoDir ++ getFileName template
 
-mkVariable :: Monad m => Maybe Value -> MuType m
-mkVariable (Just (String s)) = MuVariable s
-mkVariable (Just (Bool b)) = MuBool b
-mkVariable (Just (Number n)) = let e = floatingOrInteger n
-                                   mkval (Left r) = MuVariable (r :: Double)
-                                   mkval (Right i) = MuVariable (i :: Integer)
-                               in mkval e
+mkVariable :: Monad m => Value -> MuType m
+mkVariable (String s) = MuVariable s
+mkVariable (Bool b) = MuBool b
+mkVariable (Number n) = let e = floatingOrInteger n
+                            mkval (Left r) = MuVariable (r :: Double)
+                            mkval (Right i) = MuVariable (i :: Integer)
+                        in mkval e
 
-mkVariable (Just (Array ar)) = MuList $ map (mkStrContext . aesonContext . Just) (toList ar)
-mkVariable (Just o@(Object _)) = MuList [ mkStrContext $ aesonContext $ Just o ]
-mkVariable (Just Null) = MuVariable ("" :: String)                               
-mkVariable Nothing = MuVariable ("" :: String)
+mkVariable (Array ar) = MuList $ map (mkStrContext . aesonContext . Just) (toList ar)
+mkVariable o@(Object _) = MuList [ mkStrContext $ aesonContext $ Just o ]
+mkVariable Null = MuVariable ("" :: String)                               
 
 aesonContext :: Monad m => Maybe Value -> String -> MuType m
 aesonContext mobj k = let obj = fromJust mobj
                           Object o = obj
-                          v = HM.lookup (T.pack k) o
+                          v = HM.lookupDefault Null (T.pack k) o
                       in mkVariable v
 
 mkContext :: Monad m => String -> String -> MuType m
