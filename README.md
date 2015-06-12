@@ -74,7 +74,7 @@ value1
 
 All the templates are stored in $HOME/.trurl/repo. There are two types of templates: projects and files.
 
-* Project template is just a tar archive which is unpacked in specified directory. Template files should have extension '.template' and use the same mustache syntax as templates for command 'new'.
+* Project template is just a tar archive which is unpacked in specified directory. Template files should have extension '.template' and use the same mustache syntax as templates for command 'new'. In any case at least one parameter will be available in project template -- 'projectName' which corresponds to the provided <name> parameter. All files named as 'projectName' will be renamed according to specified project name. E.g. if creating project 'my' and there is somewhere file 'projectName.html' then it will be renamed to 'my.html'.
 * File template is a file in Mustache format. It may have any extension, but if not supplied while running 'trurl new ...' then extension '.hs' will be used.
 
 

@@ -13,7 +13,7 @@ import Data.Aeson
 import Data.Maybe
 import Data.Scientific
 import Data.String.Utils
-import System.FilePath.Find (find, always, extension, (==?))
+import System.FilePath.Find (find, always, fileName, extension, (==?), liftOp)
 
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
@@ -21,6 +21,9 @@ import qualified Data.Text.Lazy.IO as TL
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.ByteString.Lazy.Char8 as BLC8
 import qualified Data.HashMap.Strict as HM
+
+constProjectName :: String
+constProjectName = "projectName"
 
 mainRepoFile :: String
 mainRepoFile = "mainRepo.tar"
@@ -48,6 +51,20 @@ printFileHeader dir fp = do
 
 cutExtension :: String -> String -> String
 cutExtension filePath ext = take (length filePath - length ext) filePath
+
+cutAnyExtension :: String -> String
+cutAnyExtension fname =
+  let mn = elemIndex '.' $ reverse fname
+      cutExt Nothing = fname
+      cutExt (Just n)  = take ((length fname) - n - 1) fname
+  in cutExt mn
+
+extractAnyExtension :: String -> String
+extractAnyExtension fname =
+  let mn = elemIndex '.' $ reverse fname
+      extractExt Nothing = ""
+      extractExt (Just n) = drop ((length fname) - n) fname
+  in extractExt mn
 
 processTemplate :: String -> String -> String -> IO ()
 processTemplate projName paramsStr filePath  = do
@@ -91,7 +108,7 @@ mkContext paramsStr =
 
 mkProjContext :: Monad m => String -> String -> String -> MuType m
 mkProjContext projName _ "projectName" = MuVariable projName
-mkProjContext _ paramsStr key          = mkContext paramsStr key
+mkProjContext _ paramsStr key             = mkContext paramsStr key
 
 -------------------------------------
 -- API
@@ -119,14 +136,30 @@ updateFromRepository = do
 -- 5) Отрендерить эти темплейты c учетом переданных parameters
 -- 6) Сохранить отрендеренные файлы в новые файлы без ".template"
 -- 7) Удалить все файлы с расширением ".template"
+-- 8) Найти все файлы с именем projectName независимо от расширения
+-- 9) Переименовать эти файлы в соотествии с указанным projectName
 --
 createProject :: String -> String -> String -> IO ()
 createProject name project paramsStr = do
+  -- Extract the archive
   repoDir <- getLocalRepoDir
   createDirectoryIfMissing True name
   extract name $ repoDir ++ project ++ ".tar"
+
+  -- Process all templates
   templatePaths <- find always (extension ==? templateExt) name
   mapM_ (processTemplate name paramsStr) templatePaths
+
+  -- Find 'projectName' files
+  let checkFileName fname templname = (cutAnyExtension fname) == templname
+  projNamePaths <- find always (liftOp checkFileName fileName constProjectName) name
+
+  -- Rename 'projectName' files
+  let renameProjNameFile fname = let ext = extractAnyExtension fname
+                                     fpath = cutExtension fname (constProjectName ++ "." ++ ext)
+                                 in renameFile fname (fpath ++ name ++ "." ++ ext)
+  mapM_ renameProjNameFile projNamePaths
+  
 
 -- Команда "new <file> [parameters]"
 -- 1) Найти в $HOME/.trurl/repo архив с именем file.hs.
