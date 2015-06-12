@@ -116,7 +116,7 @@ updateFromRepository = do
 
 -- Команда "create <project> <name>"
 -- 1) Найти в $HOME/.trurl/repo архив с именем project.tar
--- 2) Создать дирректорию ./name
+-- 2) Создать директорию ./name
 -- 3) Распаковать в ./name содержимое project.tar
 
 createProject :: String -> String -> String -> IO ()
@@ -131,7 +131,7 @@ createProject name project paramsStr = do
 -- 1) Найти в $HOME/.trurl/repo архив с именем file.hs.
 --    Если имя файла передано с расширением, то найти точное имя файла, не подставляя *.hs
 -- 2) Прочитать содержимое шаблона
--- 3) Отрендерить его с применением hastache и переденных параметров
+-- 3) Отрендерить его с применением hastache и переданных параметров
 -- 4) Записать файл в ./
 
 newTemplate :: String -> String -> String -> IO ()
