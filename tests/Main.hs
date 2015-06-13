@@ -66,6 +66,6 @@ unitTests = testGroup "Unit tests"
       assertEqual "Checking generated text" "1" generated
 
   , testCase "mkProjContext for empty params" $ do
-      generated <- hastacheStr defaultConfig "{{projectName}}" (mkStrContext (T.mkProjContext "abc" "{}"))
+      generated <- hastacheStr defaultConfig "{{ProjectName}}" (mkStrContext (T.mkProjContext "abc" "{}"))
       assertEqual "Checking generated text" "abc" generated
   ]
