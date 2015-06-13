@@ -19,6 +19,7 @@ Build it from source using cabal:
 
 Or install it from the repository:
 
+    cabal update
     cabal install trurl-0.2.0.0
 
 ## Usage
