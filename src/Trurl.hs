@@ -7,7 +7,7 @@ import System.Directory
 import Network.HTTP.Conduit
 import Codec.Archive.Tar
 import Data.List hiding (find)
-import Text.Hastache 
+import Text.Hastache
 import Text.Hastache.Context
 import Data.Aeson
 import Data.Maybe
@@ -38,11 +38,11 @@ getLocalRepoDir :: IO String
 getLocalRepoDir = do
   home <- getHomeDirectory
   return $ home ++ "/.trurl/repo/"
-  
+
 printFile :: FilePath -> FilePath -> IO ()
 printFile dir fp = do
   file <- readFile (dir ++ fp)
-  putStrLn file 
+  putStrLn file
 
 printFileHeader :: FilePath -> FilePath -> IO ()
 printFileHeader dir fp = do
@@ -92,7 +92,7 @@ mkVariable (Number n) = let e = floatingOrInteger n
 
 mkVariable (Array ar) = MuList $ map (mkStrContext . aesonContext . Just) (toList ar)
 mkVariable o@(Object _) = MuList [ mkStrContext $ aesonContext $ Just o ]
-mkVariable Null = MuVariable ("" :: String)                               
+mkVariable Null = MuVariable ("" :: String)
 
 aesonContext :: Monad m => Maybe Value -> String -> MuType m
 aesonContext mobj k = let obj = fromJust mobj
@@ -159,7 +159,7 @@ createProject name project paramsStr = do
                                      fpath = cutExtension fname (constProjectName ++ "." ++ ext)
                                  in renameFile fname (fpath ++ name ++ "." ++ ext)
   mapM_ renameProjNameFile projNamePaths
-  
+
 
 -- Команда "new <file> [parameters]"
 -- 1) Найти в $HOME/.trurl/repo архив с именем file.hs.
