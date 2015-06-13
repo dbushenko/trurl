@@ -20,17 +20,17 @@ unitTests = testGroup "Unit tests"
   [ testCase "cutExtension" $
       assertEqual "Checking file name without extension" "a/b" (T.cutExtension "a/b.hs" ".hs")
 
-  , testCase "cutAnyExtension" $
-      assertEqual "Checking file name with unknown extension" "a.b.c" (T.cutAnyExtension "a.b.c.hs")
+  , testCase "cutSuffix" $
+      assertEqual "Checking file name with suffix" "projectName" (T.cutSuffix "Bench.hs" "projectNameBench.hs")
 
-  , testCase "cutAnyExtension" $
-      assertEqual "Checking file name without any extension" "abc" (T.cutAnyExtension "abc")
+  , testCase "cutSuffix" $
+      assertEqual "Checking file name without suffix" "projectNameBench.hs" (T.cutSuffix "Bench.hs123" "projectNameBench.hs")
 
-  , testCase "extractAnyExtension" $
-      assertEqual "Checking file name with '.hs' extension" "hs" (T.extractAnyExtension "e.f.abc.hs")
+  , testCase "extractFileNameFromPath" $
+      assertEqual "Checking file name in directory" "my.hs" (T.extractFileNameFromPath "e/f/my.hs")
       
-  , testCase "extractAnyExtension" $
-      assertEqual "Checking file name without any extension" "" (T.extractAnyExtension "abc")
+  , testCase "extractFileNameFromPath" $
+      assertEqual "Checking file name without directory" "my.hs" (T.extractFileNameFromPath "my.hs")
       
   , testCase "getFullFileName" $
       assertEqual "Checking full template path" "a/b.hs" (T.getFullFileName "a/" "b")

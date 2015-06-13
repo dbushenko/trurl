@@ -23,7 +23,7 @@ import qualified Data.ByteString.Lazy.Char8 as BLC8
 import qualified Data.HashMap.Strict as HM
 
 constProjectName :: String
-constProjectName = "projectName"
+constProjectName = "ProjectName"
 
 mainRepoFile :: String
 mainRepoFile = "mainRepo.tar"
@@ -52,18 +52,16 @@ printFileHeader dir fp = do
 cutExtension :: String -> String -> String
 cutExtension filePath ext = take (length filePath - length ext) filePath
 
-cutAnyExtension :: String -> String
-cutAnyExtension fname =
-  let mn = elemIndex '.' $ reverse fname
-      cutExt Nothing = fname
-      cutExt (Just n)  = take ((length fname) - n - 1) fname
-  in cutExt mn
+cutSuffix :: String -> String -> String
+cutSuffix suffix fname =
+  if endswith suffix fname then take (length fname - length suffix) fname
+  else fname
 
-extractAnyExtension :: String -> String
-extractAnyExtension fname =
-  let mn = elemIndex '.' $ reverse fname
-      extractExt Nothing = ""
-      extractExt (Just n) = drop ((length fname) - n) fname
+extractFileNameFromPath :: String -> String
+extractFileNameFromPath fpath =
+  let mn = elemIndex '/' $ reverse fpath
+      extractExt Nothing = fpath
+      extractExt (Just n) = drop ((length fpath) - n) fpath
   in extractExt mn
 
 processTemplate :: String -> String -> String -> IO ()
@@ -107,7 +105,7 @@ mkContext paramsStr =
      else aesonContext mobj
 
 mkProjContext :: Monad m => String -> String -> String -> MuType m
-mkProjContext projName _ "projectName" = MuVariable projName
+mkProjContext projName _ "ProjectName" = MuVariable projName
 mkProjContext _ paramsStr key             = mkContext paramsStr key
 
 -------------------------------------
@@ -136,8 +134,8 @@ updateFromRepository = do
 -- 5) Отрендерить эти темплейты c учетом переданных parameters
 -- 6) Сохранить отрендеренные файлы в новые файлы без ".template"
 -- 7) Удалить все файлы с расширением ".template"
--- 8) Найти все файлы с именем projectName независимо от расширения
--- 9) Переименовать эти файлы в соотествии с указанным projectName
+-- 8) Найти все файлы с именем ProjectName независимо от расширения
+-- 9) Переименовать эти файлы в соотествии с указанным ProjectName
 --
 createProject :: String -> String -> String -> IO ()
 createProject name project paramsStr = do
@@ -150,14 +148,15 @@ createProject name project paramsStr = do
   templatePaths <- find always (extension ==? templateExt) name
   mapM_ (processTemplate name paramsStr) templatePaths
 
-  -- Find 'projectName' files
-  let checkFileName fname templname = (cutAnyExtension fname) == templname
+  -- Find 'ProjectName' files
+  let checkFileName fname templname = isInfixOf templname fname
   projNamePaths <- find always (liftOp checkFileName fileName constProjectName) name
 
-  -- Rename 'projectName' files
-  let renameProjNameFile fname = let ext = extractAnyExtension fname
-                                     fpath = cutExtension fname (constProjectName ++ "." ++ ext)
-                                 in renameFile fname (fpath ++ name ++ "." ++ ext)
+  -- Rename 'ProjectName' files
+  let renameProjNameFile fpath = let fname = extractFileNameFromPath fpath
+                                     fdir = cutSuffix fname fpath
+                                     newfname = replace constProjectName name fname
+                                 in renameFile fpath (fdir ++ newfname)
   mapM_ renameProjNameFile projNamePaths
 
 
