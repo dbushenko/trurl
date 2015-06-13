@@ -19,7 +19,7 @@ Build it from source using cabal:
 
 Or install it from the repository:
 
-    cabal install trurl
+    cabal install trurl-0.2.0.0
 
 ## Usage
 
