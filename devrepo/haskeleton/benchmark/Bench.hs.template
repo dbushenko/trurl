@@ -1,0 +1,10 @@
+module Main (main) where
+
+import qualified {{ProjectName}}Bench
+
+import Criterion.Main (bgroup, defaultMain)
+
+main :: IO ()
+main = defaultMain
+    [ bgroup "{{ProjectName}}" {{ProjectName}}Bench.benchmarks
+    ]

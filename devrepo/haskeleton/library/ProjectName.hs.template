@@ -1,0 +1,8 @@
+{-# OPTIONS_GHC -fno-warn-unused-imports #-}
+
+-- | TODO
+module {{ProjectName}} (module {{ProjectName}}) where
+
+-- | TODO
+main :: IO ()
+main = return ()

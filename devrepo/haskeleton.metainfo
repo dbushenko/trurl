@@ -1,0 +1,6 @@
+haskeleton -- generic haskell project skeleton
+
+The template is imported from https://github.com/tfausak/haskeleton
+
+Create a new project as 'trurl create MyNewProject haskeleton'.
+Pay attention, the name of the project should start from upper case!

@@ -1,0 +1,10 @@
+module {{ProjectName}}Bench (benchmarks) where
+
+import {{ProjectName}}
+
+import Criterion
+
+benchmarks :: [Benchmark]
+benchmarks =
+    [ bench "main" (nfIO main)
+    ]
