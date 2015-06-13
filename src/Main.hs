@@ -14,7 +14,7 @@ help = do
   putStrLn "  list -- print all available templates"
   putStrLn "  help <template> -- print template info"
   putStrLn "  help -- print this help"
-  
+
 main :: IO ()
 main = do
   args <- getArgs
