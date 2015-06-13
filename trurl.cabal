@@ -1,5 +1,5 @@
 name:                trurl
-version:             0.2.1
+version:             0.2.2.0
 synopsis:            Haskell template code generator
 -- description:         
 homepage:            http://github.com/dbushenko/trurl
