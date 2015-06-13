@@ -193,4 +193,6 @@ listTemplates = do
 helpTemplate :: String -> IO ()
 helpTemplate template = do
   repoDir <- getLocalRepoDir
-  printFile repoDir ((getFileName template) ++ ".metainfo")
+  templExists <- doesFileExist $ repoDir ++ template ++ ".metainfo"
+  if templExists then printFile repoDir $ template ++ ".metainfo"
+  else printFile repoDir ((getFileName template) ++ ".metainfo")
