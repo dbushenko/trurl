@@ -99,10 +99,10 @@ aesonContext obj k  =
     _          -> mkVariable Null
 
 mkContext :: Monad m => String -> String -> MuType m
-mkContext paramsStr =
+mkContext paramsStr key =
   case decode $ BLC8.pack paramsStr of
-    Nothing  -> \_ -> MuVariable ("" :: String)
-    Just obj -> aesonContext obj
+    Nothing  -> MuVariable ("" :: String)
+    Just obj -> aesonContext obj key
 
 mkProjContext :: Monad m => String -> String -> String -> MuType m
 mkProjContext projName _ "ProjectName" = MuVariable projName
