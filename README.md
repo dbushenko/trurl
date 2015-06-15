@@ -29,10 +29,11 @@ Just run 'trurl' to see the help:
     trurl <command> [parameters]
       update -- fetch the updates from repository
       create <name> <project_template> [parameters_string] -- create project of specified type with specified name
-      new <name> <template> <parameters_string> -- create file from the template with specified parameters, wrap it with ""
+      new <name> <file_template> <parameters_string> -- create file from the template with specified parameters, wrap it with ""
       list -- print all available templates
       help <template> -- print template info
       help -- print this help
+      version -- print version
 
 * Command 'update' fetches all the latest templates from the repository. Run it before using any other command.
 * Command 'list' shows available templates. Technically it finds all the files *.metainfo in $HOME/.trurl/repo and prints thir first lines.

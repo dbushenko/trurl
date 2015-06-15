@@ -10,10 +10,10 @@ import Data.List hiding (find)
 import Text.Hastache
 import Text.Hastache.Context
 import Data.Aeson
-import Data.Maybe
 import Data.Scientific
 import Data.String.Utils
 import System.FilePath.Find (find, always, fileName, extension, (==?), liftOp)
+import Safe
 
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
@@ -47,7 +47,7 @@ printFile dir fp = do
 printFileHeader :: FilePath -> FilePath -> IO ()
 printFileHeader dir fp = do
   file <- readFile (dir ++ fp)
-  putStrLn $ head $ split "\n" file
+  putStrLn $ headDef "No info found..." $ split "\n" file
 
 cutExtension :: String -> String -> String
 cutExtension filePath ext = take (length filePath - length ext) filePath
@@ -93,9 +93,10 @@ mkVariable o@(Object _) = MuList [ mkStrContext $ aesonContext o ]
 mkVariable Null = MuVariable ("" :: String)
 
 aesonContext :: Monad m => Value -> String -> MuType m
-aesonContext obj k  = let Object o = obj
-                          v = HM.lookupDefault Null (T.pack k) o
-                      in mkVariable v
+aesonContext obj k  = 
+  case obj of
+    (Object o) -> mkVariable $ HM.lookupDefault Null (T.pack k) o
+    _          -> mkVariable Null
 
 mkContext :: Monad m => String -> String -> MuType m
 mkContext paramsStr =

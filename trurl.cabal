@@ -1,5 +1,5 @@
 name:                trurl
-version:             0.2.2.0
+version:             0.3.0.0
 synopsis:            Haskell template code generator
 -- description:         
 homepage:            http://github.com/dbushenko/trurl
@@ -28,6 +28,7 @@ library
                      , unordered-containers
                      , MissingH
                      , filemanip
+                     , safe
                      
   default-language:    Haskell2010
 
