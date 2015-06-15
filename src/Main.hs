@@ -3,6 +3,8 @@
 module Main where
 
 import Trurl
+import SimpleParams
+
 import System.Environment
 
 help :: IO ()
@@ -23,14 +25,18 @@ main :: IO ()
 main = do
   args <- getArgs
   case args of
-    []                                -> help
-    ["help"]                          -> help
-    ["help", template]                -> helpTemplate template
-    ["update"]                        -> updateFromRepository
-    ["create", name, project]         -> createProject name project "{}"
-    ["create", name, project, params] -> createProject name project params
-    ["new", name, template, params]   -> newTemplate name template params
-    ["list"]                          -> listTemplates
-    ["version"]                       -> printVersion
-    ["-v"]                            -> printVersion
-    _                                 -> putStrLn "Unknown command"
+    []                                      -> help
+    ["help"]                                -> help
+    ["help", template]                      -> helpTemplate template
+    ["update"]                              -> updateFromRepository
+    ["create", name, project]               -> createProject name project "{}"
+    ["create", name, project, "-j", params] -> createProject name project params
+    ["create", name, project, "-s", params] -> createProject name project $ simpleParamsToJson params
+    ["create", name, project, params]       -> createProject name project $ simpleParamsToJson params
+    ["new", name, template, "-j" ,params]   -> newTemplate name template params
+    ["new", name, template, "-s" ,params]   -> newTemplate name template $ simpleParamsToJson params
+    ["new", name, template, params]         -> newTemplate name template $ simpleParamsToJson params
+    ["list"]                                -> listTemplates
+    ["version"]                             -> printVersion
+    ["-v"]                                  -> printVersion
+    _                                       -> putStrLn "Unknown command"

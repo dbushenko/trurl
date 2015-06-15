@@ -14,7 +14,10 @@ build-type:          Simple
 cabal-version:       >=1.10
 
 library
+    
   exposed-modules:     Trurl
+                     , SimpleParams
+                     
   hs-source-dirs:      src
   build-depends:       base >= 4.7 && < 5
                      , http-conduit
