@@ -88,21 +88,20 @@ mkVariable (Number n) = let e = floatingOrInteger n
                             mkval (Right i) = MuVariable (i :: Integer)
                         in mkval e
 
-mkVariable (Array ar) = MuList $ map (mkStrContext . aesonContext . Just) (toList ar)
-mkVariable o@(Object _) = MuList [ mkStrContext $ aesonContext $ Just o ]
+mkVariable (Array ar) = MuList $ map (mkStrContext . aesonContext) (toList ar)
+mkVariable o@(Object _) = MuList [ mkStrContext $ aesonContext o ]
 mkVariable Null = MuVariable ("" :: String)
 
-aesonContext :: Monad m => Maybe Value -> String -> MuType m
-aesonContext mobj k = let obj = fromJust mobj
-                          Object o = obj
+aesonContext :: Monad m => Value -> String -> MuType m
+aesonContext obj k  = let Object o = obj
                           v = HM.lookupDefault Null (T.pack k) o
                       in mkVariable v
 
 mkContext :: Monad m => String -> String -> MuType m
 mkContext paramsStr =
-  let mobj = decode (BLC8.pack paramsStr) :: Maybe Value
-  in if isNothing mobj then \_ -> MuVariable ("" :: String)
-     else aesonContext mobj
+  case decode $ BLC8.pack paramsStr of
+    Nothing  -> \_ -> MuVariable ("" :: String)
+    Just obj -> aesonContext obj
 
 mkProjContext :: Monad m => String -> String -> String -> MuType m
 mkProjContext projName _ "ProjectName" = MuVariable projName
