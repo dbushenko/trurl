@@ -75,15 +75,18 @@ trurlTests = testGroup "Trurl unit tests"
 simplParamsTests :: TestTree
 simplParamsTests = testGroup "Trurl unit tests"
   [ testCase "extractPortion without delimiter" $
-      assertEqual "Checking extractPortion" ("abc", "") (S.extractPortion "" "abc")
+      assertEqual "Checking extractPortion" (S.ParsedObject "abc" "") (S.extractPortion "" "abc")
 
   , testCase "extractPortion with delimiter" $
-      assertEqual "Checking extractPortion" ("abc", "efg,123") (S.extractPortion "" "abc,efg,123")
+      assertEqual "Checking extractPortion" (S.ParsedObject "abc" "efg,123") (S.extractPortion "" "abc,efg,123")
 
   , testCase "makePropertyTuple" $
       assertEqual "Checking makePropertyTuple" "\"abc\":\"efg\"" (S.makePropertyTuple "abc:efg")
 
+  , testCase "makeObjectTuple" $
+      assertEqual "Checking makeObjectTuple" "{\"name\":abc\",\"type\":\"efg\"}" (S.makeObjectTuple "abc#efg")
+
   , testCase "processString simple" $
-      assertEqual "Checking processString" ("\"abc\":\"efg\",\"123\":\"456\"","") (S.processString ("", "abc:efg,123:456"))
+      assertEqual "Checking processString" (S.ParsedObject "\"abc\":\"efg\",\"123\":\"456\"" "") (S.processString $ S.ParsedObject "" "abc:efg,123:456")
 
   ]
