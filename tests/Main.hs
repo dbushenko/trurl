@@ -74,19 +74,17 @@ trurlTests = testGroup "Trurl unit tests"
 
 simplParamsTests :: TestTree
 simplParamsTests = testGroup "Trurl unit tests"
-  [ testCase "extractPortion without delimiter" $
-      assertEqual "Checking extractPortion" (S.ParsedObject "abc" "") (S.extractPortion "" "abc")
+  [ testCase "parseEmbedded without delimiter" $
+      assertEqual "Checking parseEmbedded" "" (S.parseEmbedded "abc")
 
-  , testCase "extractPortion with delimiter" $
-      assertEqual "Checking extractPortion" (S.ParsedObject "abc" "efg,123") (S.extractPortion "" "abc,efg,123")
+  , testCase "parseEmbedded with delimiter" $
+      assertEqual "Checking parseEmbedded" "{\"name\":\"abc\",\"type\":\"efg\"}" (S.parseEmbedded "abc#efg")
 
-  , testCase "makePropertyTuple" $
-      assertEqual "Checking makePropertyTuple" "\"abc\":\"efg\"" (S.makePropertyTuple "abc:efg")
+  , testCase "parseEmbedded with delimiter" $
+      assertEqual "Checking parseEmbedded" "{\"name\":\"abc\",\"type\":\"efg\",\"last\":true}" (S.parseEmbedded "abc#efg!")
 
-  , testCase "makeObjectTuple" $
-      assertEqual "Checking makeObjectTuple" "{\"name\":abc\",\"type\":\"efg\"}" (S.makeObjectTuple "abc#efg")
-
-  , testCase "processString simple" $
-      assertEqual "Checking processString" (S.ParsedObject "\"abc\":\"efg\",\"123\":\"456\"" "") (S.processString $ S.ParsedObject "" "abc:efg,123:456")
-
+  , testCase "simpleParamsToJson" $
+      assertEqual "Checking simpleParamsToJson" 
+                  "{\"abc\":123,\"efg\":456,\"zxc\":[1,2,3],\"ttt\":[{\"name\":\"abc\",\"type\":\"efg\"},{\"name\":\"hck\",\"type\":\"qwe\"},{\"name\":\"zxc\",\"type\":\"vbn\",\"last\":true}]}"
+                  (S.simpleParamsToJson "abc:123,efg:456,zxc:[1,2,3],ttt:[abc#efg,hck#qwe,zxc#vbn!]")
   ]

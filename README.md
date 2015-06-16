@@ -22,24 +22,50 @@ Or install it from the repository:
     cabal update
     cabal install trurl-0.2.2.0
 
+## Quick Start
+
+Run following comments to create a scotty/mysql project:
+
+    trurl create myproject scotty-mysql
+
+Go to myproject/src, run following command to generate entity Comment:
+
+    trurl new Comment scotty-entity 'Name:Comment, props:[comment#String, author#String]'
+
 ## Usage
 
 Just run 'trurl' to see the help:
 
-    trurl <command> [parameters]
-      update -- fetch the updates from repository
-      create <name> <project_template> [parameters_string] -- create project of specified type with specified name
-      new <name> <file_template> <parameters_string> -- create file from the template with specified parameters, wrap it with ""
-      list -- print all available templates
-      help <template> -- print template info
-      help -- print this help
-      version -- print version
-
+trurl <command> [parameters]
+  update -- fetch the updates from repository
+  create <name> <project_template> -j [parameters_string] -- create project of specified type with specified name; optionally add JSON parameters
+  create <name> <project_template> -s [parameters_string] -- create project of specified type with specified name; optionally add string parameters
+  create <name> <project_template> [parameters_string] -- create project of specified type with specified name; optionally add string parameters
+  new <name> <file_template> -j [parameters_string] -- create file from the template with specified JSON parameters, wrap it with "" or ''
+  new <name> <file_template> -s [parameters_string] -- create file from the template with specified string parameters, wrap it with "" or ''
+  new <name> <file_template> [parameters_string] -- create file from the template with specified string parameters, wrap it with "" or ''
+  list -- print all available templates
+  help <template> -- print template info
+  help -- print this help
+  version -- print version
+  
 * Command 'update' fetches all the latest templates from the repository. Run it before using any other command.
 * Command 'list' shows available templates. Technically it finds all the files *.metainfo in $HOME/.trurl/repo and prints thir first lines.
 * Command 'help <template>' prints detailed info about the template.
-* Command 'create' intended to generate projects, just specify an available project template name. You may also sepcify parameters in JSON format. In any case at least one parameter will be available in project template -- 'ProjectName' which corresponds to the provided <name> parameter.
-* Command 'new' generates template file, generated file will be named as specified in 'name'. It uses Mustache format in templates and accepts parameters in JSON format.
+* Command 'create' intended to generate projects, just specify an available project template name. You may also sepcify optional parameters. In any case at least one parameter will be available in project template -- 'ProjectName' which corresponds to the provided <name> parameter.
+* Command 'new' generates template file, generated file will be named as specified in 'name'. It uses Mustache format in templates and accepts mandatory parameters.
+
+Parameters for commands 'create' and 'new' may be of two types: JSON and simple string.
+
+* JSON parameters might look like this: '{"entityName": "Article", "params": [ {"name":"title","type":"String"}, {"name":"body", "type":"String"}]}"
+* Totally the same simple string looks like this: 'entityName:Article, params: [ title#String, body#String ]'
+
+Simple string parameters use following rules to correspond to JSON:
+
+* abc:efg is converted to "abc":"efg"
+* abc:123 is converted to "abc":123
+* abc#efg is converted to {"name":"abc", "type":"efg"} -- this conversion is especially useful when generating object with list of properties.
+* abc#efg! is converted to {"name":"abc", "type":"efg", "last":true} -- this conversion is needed when generating list of properties and you need to avoid last separator (coma, whitespace, etc).
 
 For example, if there is a template file 'file1.txt' with following contents:
 
@@ -58,7 +84,7 @@ MyObj:
 
 Run trurl as following:
 
-    trurl new file1.txt '{"heroes":[{"name":"1"},{"name":"22"}],"myobj":{"opt1":"value1"}}'
+    trurl new file1.txt -j '{"heroes":[{"name":"1"},{"name":"22"}],"myobj":{"opt1":"value1"}}'
 
 Then you'll get:
 

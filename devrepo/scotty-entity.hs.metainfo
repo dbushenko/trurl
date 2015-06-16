@@ -13,4 +13,9 @@ Accepts following parameters:
 Important: field 'id' is generated automatically.
 
 Example:
-trurl new Book json-entity '{"Name":"Book","props":[{"name":"cover","type":"Text"},{"name":"year","type":"Integer","last":true}]}'
+trurl new Book scotty-entity -j '{"Name":"Book","props":[{"name":"cover","type":"Text"},{"name":"year","type":"Integer","last":true}]}'
+
+or totally the same with simpler syntax:
+
+trurl new Book scotty-entity 'Name:Book, props:[cover#Text, year#Integer!]'
+
