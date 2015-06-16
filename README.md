@@ -20,7 +20,7 @@ Build it from source using cabal:
 Or install it from the repository:
 
     cabal update
-    cabal install trurl-0.2.2.0
+    cabal install trurl-0.3.0.0
 
 ## Quick Start
 
@@ -36,18 +36,18 @@ Go to myproject/src, run following command to generate entity Comment:
 
 Just run 'trurl' to see the help:
 
-trurl <command> [parameters]
-  update -- fetch the updates from repository
-  create <name> <project_template> -j [parameters_string] -- create project of specified type with specified name; optionally add JSON parameters
-  create <name> <project_template> -s [parameters_string] -- create project of specified type with specified name; optionally add string parameters
-  create <name> <project_template> [parameters_string] -- create project of specified type with specified name; optionally add string parameters
-  new <name> <file_template> -j [parameters_string] -- create file from the template with specified JSON parameters, wrap it with "" or ''
-  new <name> <file_template> -s [parameters_string] -- create file from the template with specified string parameters, wrap it with "" or ''
-  new <name> <file_template> [parameters_string] -- create file from the template with specified string parameters, wrap it with "" or ''
-  list -- print all available templates
-  help <template> -- print template info
-  help -- print this help
-  version -- print version
+    trurl <command> [parameters]
+      update -- fetch the updates from repository
+      create <name> <project_template> -j [parameters_string] -- create project of specified type with specified name; optionally add JSON parameters
+      create <name> <project_template> -s [parameters_string] -- create project of specified type with specified name; optionally add string parameters
+      create <name> <project_template> [parameters_string] -- create project of specified type with specified name; optionally add string parameters
+      new <name> <file_template> -j [parameters_string] -- create file from the template with specified JSON parameters, wrap it with "" or ''
+      new <name> <file_template> -s [parameters_string] -- create file from the template with specified string parameters, wrap it with "" or ''
+      new <name> <file_template> [parameters_string] -- create file from the template with specified string parameters, wrap it with "" or ''
+      list -- print all available templates
+      help <template> -- print template info
+      help -- print this help
+      version -- print version
   
 * Command 'update' fetches all the latest templates from the repository. Run it before using any other command.
 * Command 'list' shows available templates. Technically it finds all the files *.metainfo in $HOME/.trurl/repo and prints thir first lines.
