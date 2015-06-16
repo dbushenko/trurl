@@ -88,9 +88,12 @@ mkVariable (Number n) = let e = floatingOrInteger n
                             mkval (Right i) = MuVariable (i :: Integer)
                         in mkval e
 
-mkVariable (Array ar) = MuList $ map (mkStrContext . aesonContext) (toList ar)
-mkVariable o@(Object _) = MuList [ mkStrContext $ aesonContext o ]
+mkVariable (Array ar) = mkMuList (toList ar)
+mkVariable o@(Object _) = mkMuList [o]
 mkVariable Null = MuVariable ("" :: String)
+
+mkMuList :: Monad m => [Value] -> MuType m
+mkMuList = MuList . map (mkStrContext . aesonContext)
 
 aesonContext :: Monad m => Value -> String -> MuType m
 aesonContext obj k  = 
