@@ -30,7 +30,7 @@ Run following comments to create a scotty/mysql project:
 
 Go to myproject/src, run following command to generate entity Comment:
 
-    trurl new Comment scotty-entity 'Name:Comment, props:[comment#String, author#String]'
+    trurl new Comment scotty-entity 'Name:Comment, props:[comment#String, author#String!]'
 
 ## Usage
 
