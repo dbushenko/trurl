@@ -8,15 +8,16 @@ import Text.Hastache
 import Text.Hastache.Context
 
 import qualified Trurl as T
+import qualified SimpleParams as S
 
 main :: IO ()
 main = defaultMain tests
 
 tests :: TestTree
-tests = testGroup "Tests" [unitTests]
+tests = testGroup "Tests" [trurlTests, simplParamsTests]
 
-unitTests :: TestTree
-unitTests = testGroup "Unit tests"
+trurlTests :: TestTree
+trurlTests = testGroup "Trurl unit tests"
   [ testCase "cutExtension" $
       assertEqual "Checking file name without extension" "a/b" (T.cutExtension "a/b.hs" ".hs")
 
@@ -68,4 +69,21 @@ unitTests = testGroup "Unit tests"
   , testCase "mkProjContext for empty params" $ do
       generated <- hastacheStr defaultConfig "{{ProjectName}}" (mkStrContext (T.mkProjContext "abc" "{}"))
       assertEqual "Checking generated text" "abc" generated
+  ]
+
+
+simplParamsTests :: TestTree
+simplParamsTests = testGroup "Trurl unit tests"
+  [ testCase "extractPortion without delimiter" $
+      assertEqual "Checking extractPortion" ("abc", "") (S.extractPortion "" "abc")
+
+  , testCase "extractPortion with delimiter" $
+      assertEqual "Checking extractPortion" ("abc", "efg,123") (S.extractPortion "" "abc,efg,123")
+
+  , testCase "makePropertyTuple" $
+      assertEqual "Checking makePropertyTuple" "\"abc\":\"efg\"" (S.makePropertyTuple "abc:efg")
+
+  , testCase "processString simple" $
+      assertEqual "Checking processString" ("\"abc\":\"efg\",\"123\":\"456\"","") (S.processString ("", "abc:efg,123:456"))
+
   ]
