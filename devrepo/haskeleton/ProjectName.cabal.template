@@ -4,13 +4,13 @@ cabal-version: >=1.10
 build-type: Simple
 license: MIT
 license-file: LICENSE.md
-copyright: 2015 dbushenko <d.bushenko@gmail.com>
-maintainer: dbushenko <d.bushenko@gmail.com>
+copyright: 2015 {{author}} <{{email}}>
+maintainer: {{author}} <{{email}}>
 synopsis: TODO
 description:
     TODO
 category: TODO
-author: dbushenko <d.bushenko@gmail.com>
+author: {{author}} <{{email}}>
 tested-with: GHC ==7.8 GHC ==7.6
 extra-source-files:
     CHANGELOG.md
@@ -19,6 +19,7 @@ extra-source-files:
 library
     exposed-modules:
         {{ProjectName}}
+        -- HASKELETON: New.Module
     build-depends:
         base ==4.*
     default-language: Haskell2010
@@ -49,7 +50,9 @@ test-suite tests
     hs-source-dirs: library test-suite
     other-modules:
         {{ProjectName}}
+        -- HASKELETON: New.Module
         {{ProjectName}}Spec
+        -- HASKELETON: New.ModuleSpec
     ghc-options: -fhpc -Wall -Werror
 test-suite examples
     type: exitcode-stdio-1.0

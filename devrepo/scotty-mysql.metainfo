@@ -1,1 +1,5 @@
 scotty-mysql -- [create] JSON REST-server using scotty and MySQL.
+
+Example:
+
+trurl create MyProject scotty-mysql

@@ -3,6 +3,8 @@
 -- | TODO
 module {{ProjectName}} (module {{ProjectName}}) where
 
+-- HASKELETON: import New.Module as {{ProjectName}}
+
 -- | TODO
 main :: IO ()
 main = return ()

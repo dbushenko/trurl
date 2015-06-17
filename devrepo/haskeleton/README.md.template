@@ -1,4 +1,4 @@
-# haskeleton
+# {{ProjectName}}
 
 This is a new package created by [Haskeleton][]. To finish setting it up, look
 for "TODO"s in the Cabal file and in the library itself. To quickly get up and
