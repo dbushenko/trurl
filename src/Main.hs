@@ -23,7 +23,7 @@ help = do
   putStrLn "  version -- print version"
 
 printVersion :: IO ()
-printVersion = putStrLn "0.3.0.0"
+printVersion = putStrLn "0.3.0.x"
 
 main :: IO ()
 main = do

@@ -1,5 +1,5 @@
 name:                trurl
-version:             0.3.0.3
+version:             0.3.0.4
 synopsis:            Haskell template code generator
 description:
     Trurl is a haskell project and code generating utility. Use it for scaffolding your projects and entities.
@@ -11,7 +11,7 @@ description:
     .        
             trurl create MyProject scotty-mysql
     .        
-    Trurl allows creating your own templates for projects as well as for files. Just put them to ~/.trurl/repo.       
+    Trurl allows creating your own templates for projects as well as for files.
     
 homepage:            http://github.com/dbushenko/trurl
 license:             BSD3
