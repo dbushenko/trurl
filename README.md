@@ -26,9 +26,9 @@ Or install it from the repository:
 
 Run following comments to create a scotty/mysql project:
 
-    trurl create myproject scotty-mysql
+    trurl create MyProject scotty-mysql
 
-Go to myproject/src, run following command to generate entity Comment:
+Go to MyProject/src, run following command to generate entity Comment:
 
     trurl new Comment scotty-entity 'props:[comment#String, author#String!]'
 
