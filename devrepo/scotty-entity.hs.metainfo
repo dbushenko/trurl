@@ -2,20 +2,21 @@ scotty-entity -- [new] generates json entity for the scotty JSON REST-server.
 
 Accepts following parameters:
 
-{"Name": "Entity",   -- the entity name
- "props": [          -- the entity properties
+{"props": [            -- the entity properties
  {"name": "some_name", -- entity field name
   "type": "some_type", -- entity field type
   "last": true/false   -- set it to 'true' on the last element, skip on others
  ]
 }
 
+Entity name will correspond to the name specified on the commandline.
+
 Important: field 'id' is generated automatically.
 
 Example:
-trurl new Book scotty-entity -j '{"Name":"Book","props":[{"name":"cover","type":"Text"},{"name":"year","type":"Integer","last":true}]}'
+trurl new Book scotty-entity -j '{"props":[{"name":"cover","type":"Text"},{"name":"year","type":"Integer","last":true}]}'
 
 or totally the same with simpler syntax:
 
-trurl new Book scotty-entity 'Name:Book, props:[cover#Text, year#Integer!]'
+trurl new Book scotty-entity 'props:[cover#Text, year#Integer!]'
 

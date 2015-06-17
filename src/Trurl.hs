@@ -111,6 +111,11 @@ mkProjContext :: Monad m => String -> String -> String -> MuType m
 mkProjContext projName _ "ProjectName" = MuVariable projName
 mkProjContext _ paramsStr key             = mkContext paramsStr key
 
+
+mkFileContext :: Monad m => String -> String -> String -> MuType m
+mkFileContext fname _ "FileName" = MuVariable fname
+mkFileContext _ paramsStr key     = mkContext paramsStr key
+
 -------------------------------------
 -- API
 --
@@ -175,7 +180,7 @@ newTemplate name templateName paramsStr = do
   repoDir <- getLocalRepoDir
   let templPath = getFullFileName repoDir templateName
   template <- T.readFile templPath
-  generated <- hastacheStr defaultConfig template (mkStrContext (mkContext paramsStr))
+  generated <- hastacheStr defaultConfig template (mkStrContext (mkFileContext name paramsStr))
   TL.writeFile (getFileName name) generated
 
 -- Команда "list"
