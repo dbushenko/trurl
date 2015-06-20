@@ -81,10 +81,10 @@ simplParamsTests = testGroup "Trurl unit tests"
       assertEqual "Checking parseEmbedded" "{\"name\":\"abc\",\"type\":\"efg\"}" (S.parseEmbedded "abc#efg")
 
   , testCase "parseEmbedded with delimiter" $
-      assertEqual "Checking parseEmbedded" "{\"name\":\"abc\",\"type\":\"efg\",\"last\":true}" (S.parseEmbedded "abc#efg!")
+      assertEqual "Checking parseEmbedded" "{\"name\":\"abc\",\"type\":\"efg\",\"last\":true}" (S.parseEmbedded "abc#efg@")
 
   , testCase "simpleParamsToJson" $
       assertEqual "Checking simpleParamsToJson" 
                   "{\"abc\":123,\"efg\":456,\"zxc\":[1,2,3],\"ttt\":[{\"name\":\"abc\",\"type\":\"efg\"},{\"name\":\"hck\",\"type\":\"qwe\"},{\"name\":\"zxc\",\"type\":\"vbn\",\"last\":true}]}"
-                  (S.simpleParamsToJson "abc:123,efg:456,zxc:[1,2,3],ttt:[abc#efg,hck#qwe,zxc#vbn!]")
+                  (S.simpleParamsToJson "abc:123,efg:456,zxc:[1,2,3],ttt:[abc#efg,hck#qwe,zxc#vbn@]")
   ]

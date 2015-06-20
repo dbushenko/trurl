@@ -11,7 +11,7 @@ parseEmbedded :: String -> String
 parseEmbedded str =
   let splitted = split "#" str
   in if length splitted /= 2 then ""
-     else if endswith "!" (splitted !! 1) then "{\"name\":\"" ++ splitted !! 0 ++ "\",\"type\":\"" ++ (replace "!" "" $ splitted !! 1) ++ "\",\"last\":true}"
+     else if endswith "@" (splitted !! 1) then "{\"name\":\"" ++ splitted !! 0 ++ "\",\"type\":\"" ++ (replace "@" "" $ splitted !! 1) ++ "\",\"last\":true}"
           else "{\"name\":\"" ++ splitted !! 0 ++ "\",\"type\":\"" ++ splitted !! 1 ++ "\"}"
 
 processPart :: String -> String

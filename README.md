@@ -20,7 +20,7 @@ Build it from source using cabal:
 Or install it from the repository:
 
     cabal update
-    cabal install trurl-0.3.0.0
+    cabal install trurl-0.3.1.0
 
 ## Quick Start
 
@@ -30,7 +30,7 @@ Run following comments to create a scotty/mysql project:
 
 Go to MyProject/src, run following command to generate entity Comment:
 
-    trurl new Comment scotty-entity 'props:[comment#String, author#String!]'
+    trurl new Comment scotty-entity 'props:[comment#String, author#String@]'
 
 ## Usage
 
@@ -38,12 +38,10 @@ Just run 'trurl' to see the help:
 
     trurl <command> [parameters]
       update -- fetch the updates from repository
-      create <name> <project_template> -j [parameters_string] -- create project of specified type with specified name; optionally add JSON parameters
-      create <name> <project_template> -s [parameters_string] -- create project of specified type with specified name; optionally add string parameters
-      create <name> <project_template> [parameters_string] -- create project of specified type with specified name; optionally add string parameters
+      create <name> <project_template> -j [parameters_string] -- create project of specified type with specified name; optionally add JSON parameters, wrap it with \"\" or ''
+      create <name> <project_template> [parameters] -- create project of specified type with specified name; optionally add parameters
       new <name> <file_template> -j [parameters_string] -- create file from the template with specified JSON parameters, wrap it with "" or ''
-      new <name> <file_template> -s [parameters_string] -- create file from the template with specified string parameters, wrap it with "" or ''
-      new <name> <file_template> [parameters_string] -- create file from the template with specified string parameters, wrap it with "" or ''
+      new <name> <file_template> [parameters] -- create file from the template with specified string parameters
       list -- print all available templates
       help <template> -- print template info
       help -- print this help
@@ -65,7 +63,7 @@ Simple string parameters use following rules to correspond to JSON:
 * abc:efg is converted to "abc":"efg"
 * abc:123 is converted to "abc":123
 * abc#efg is converted to {"name":"abc", "type":"efg"} -- this conversion is especially useful when generating object with list of properties.
-* abc#efg! is converted to {"name":"abc", "type":"efg", "last":true} -- this conversion is needed when generating list of properties and you need to avoid last separator (coma, whitespace, etc).
+* abc#efg@ is converted to {"name":"abc", "type":"efg", "last":true} -- this conversion is needed when generating list of properties and you need to avoid last separator (coma, whitespace, etc).
 
 For example, if there is a template file 'file1.txt' with following contents:
 

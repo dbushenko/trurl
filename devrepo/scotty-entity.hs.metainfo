@@ -18,5 +18,5 @@ trurl new Book scotty-entity -j '{"props":[{"name":"cover","type":"Text"},{"name
 
 or totally the same with simpler syntax:
 
-trurl new Book scotty-entity 'props:[cover#Text, year#Integer!]'
+trurl new Book scotty-entity props:[cover#Text, year#Integer@]
 
