@@ -63,7 +63,7 @@ Simple string parameters use following rules to correspond to JSON:
 * abc:efg is converted to "abc":"efg"
 * abc:123 is converted to "abc":123
 * abc#efg is converted to {"name":"abc", "type":"efg"} -- this conversion is especially useful when generating object with list of properties.
-* abc#efg@ is converted to {"name":"abc", "type":"efg", "last":true} -- this conversion is needed when generating list of properties and you need to avoid last separator (coma, whitespace, etc).
+* abc#efg@ is converted to {"name":"abc", "type":"efg", "last":true} -- this conversion is needed when generating list of properties and you need to avoid last separator (comma, whitespace, etc).
 
 For example, if there is a template file 'file1.txt' with following contents:
 
