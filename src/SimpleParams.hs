@@ -9,10 +9,12 @@ import Data.Char
 
 parseEmbedded :: String -> String
 parseEmbedded str =
-  let splitted = split "#" str
-  in if length splitted /= 2 then ""
-     else if endswith "@" (splitted !! 1) then "{\"name\":\"" ++ splitted !! 0 ++ "\",\"type\":\"" ++ (replace "@" "" $ splitted !! 1) ++ "\",\"last\":true}"
-          else "{\"name\":\"" ++ splitted !! 0 ++ "\",\"type\":\"" ++ splitted !! 1 ++ "\"}"
+  case split "#" str of
+    [name, typ] ->
+      if endswith "@" typ
+        then "{\"name\":\"" ++ name ++ "\",\"type\":\"" ++ replace "@" "" typ ++ "\",\"last\":true}"
+        else "{\"name\":\"" ++ name ++ "\",\"type\":\"" ++ typ ++ "\"}"
+    _ -> ""
 
 processPart :: String -> String
 processPart str =
