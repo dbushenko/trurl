@@ -15,7 +15,7 @@ parseEmbedded str =
           else "{\"name\":\"" ++ splitted !! 0 ++ "\",\"type\":\"" ++ splitted !! 1 ++ "\"}"
 
 processPart :: String -> String
-processPart str = 
+processPart str =
   let symb = headDef ' ' str
   in if isDigit symb then str
      else if symb == ','
@@ -29,13 +29,12 @@ processPart str =
                else "\"" ++ str ++ "\""
 
 simpleParamsToJson :: String -> String
-simpleParamsToJson sparams = 
-  let s =  (replace "," " , ") 
-         . (replace "[" " [ ") 
-         . (replace "{" " { ") 
-         . (replace "]" " ] ") 
-         . (replace "}" " } ") 
-         . (replace ":" " : ") 
-         $ sparams      
+simpleParamsToJson sparams =
+  let s =  (replace "," " , ")
+         . (replace "[" " [ ")
+         . (replace "{" " { ")
+         . (replace "]" " ] ")
+         . (replace "}" " } ")
+         . (replace ":" " : ")
+         $ sparams
   in "{" ++  (foldl (++) "" $ map processPart  $ splitWs s) ++ "}"
-
