@@ -50,11 +50,6 @@ printFileHeader dir fp = do
   file <- readFile (dir ++ fp)
   putStrLn $ headDef "No info found..." $ lines file
 
-cutSuffix :: String -> String -> String
-cutSuffix suffix fname =
-  if endswith suffix fname then take (length fname - length suffix) fname
-  else fname
-
 processTemplate :: String -> String -> String -> IO ()
 processTemplate projName paramsStr filePath  = do
   template <- T.readFile filePath

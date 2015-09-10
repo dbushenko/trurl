@@ -18,13 +18,7 @@ tests = testGroup "Tests" [trurlTests, simplParamsTests]
 
 trurlTests :: TestTree
 trurlTests = testGroup "Trurl unit tests"
-  [ testCase "cutSuffix" $
-      assertEqual "Checking file name with suffix" "projectName" (T.cutSuffix "Bench.hs" "projectNameBench.hs")
-
-  , testCase "cutSuffix" $
-      assertEqual "Checking file name without suffix" "projectNameBench.hs" (T.cutSuffix "Bench.hs123" "projectNameBench.hs")
-
-  , testCase "getFullFileName" $
+  [ testCase "getFullFileName" $
       assertEqual "Checking full template path" "a/b.hs" (T.getFullFileName "a/" "b")
 
   , testCase "getFileName" $
