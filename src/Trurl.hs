@@ -50,8 +50,8 @@ printFileHeader dir fp = do
   file <- readFile (dir ++ fp)
   putStrLn $ headDef "No info found..." $ lines file
 
-cutExtension :: String -> String -> String
-cutExtension filePath _ = dropExtension filePath
+cutExtension :: String -> String
+cutExtension filePath = dropExtension filePath
 
 cutSuffix :: String -> String -> String
 cutSuffix suffix fname =
@@ -69,7 +69,7 @@ processTemplate :: String -> String -> String -> IO ()
 processTemplate projName paramsStr filePath  = do
   template <- T.readFile filePath
   generated <- hastacheStr defaultConfig template (mkStrContext (mkProjContext projName paramsStr))
-  TL.writeFile (cutExtension filePath templateExt) generated
+  TL.writeFile (cutExtension filePath) generated
   removeFile filePath
   return ()
 
