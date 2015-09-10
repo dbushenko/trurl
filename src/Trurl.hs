@@ -80,19 +80,19 @@ mkVariable o@(Object _) = mkMuList [o]
 mkVariable Null = MuVariable ("" :: String)
 
 mkMuList :: Monad m => [Value] -> MuType m
-mkMuList = MuList . map (mkStrContext . aesonContext)
+mkMuList = MuList . map aesonContext
 
-aesonContext :: Monad m => Value -> String -> MuType m
-aesonContext obj k  =
+aesonContext :: Monad m => Value -> MuContext m
+aesonContext obj  =
   case obj of
-    (Object o) -> mkVariable $ HM.lookupDefault Null (T.pack k) o
-    _          -> mkVariable Null
+    Object o -> mkStrContext $ \k -> mkVariable $ HM.lookupDefault Null (T.pack k) o
+    _        -> const $ return $ mkVariable Null
 
 mkContext :: Monad m => String -> MuContext m
 mkContext paramsStr =
-  mkStrContext $ \key -> case decode $ BLC8.pack paramsStr of
-    Nothing  -> MuVariable ("" :: String)
-    Just obj -> aesonContext obj key
+  case decode $ BLC8.pack paramsStr of
+    Nothing  -> const $ return $ mkVariable Null
+    Just obj -> aesonContext obj
 
 mkProjContext :: Monad m => String -> String -> MuContext m
 mkProjContext projName paramsStr =
