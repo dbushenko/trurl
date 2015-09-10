@@ -75,7 +75,7 @@ mkVariable (Number n) = case floatingOrInteger n of
                             Right i -> MuVariable (i :: Integer)
 mkVariable (Array ar) = mkMuList (toList ar)
 mkVariable o@(Object _) = mkMuList [o]
-mkVariable Null = MuVariable ("" :: String)
+mkVariable Null = MuNothing
 
 mkMuList :: Monad m => [Value] -> MuType m
 mkMuList = MuList . map aesonContext
@@ -91,7 +91,7 @@ mkContext =
   maybe emptyContext aesonContext . decode . BLC8.pack
 
 emptyContext :: Monad m => MuContext m
-emptyContext = const $ return $ MuVariable ("" :: String)
+emptyContext = const $ return MuNothing
 
 mkProjContext :: Monad m => String -> String -> MuContext m
 mkProjContext projName paramsStr =
