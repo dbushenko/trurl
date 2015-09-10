@@ -80,10 +80,14 @@ mkVariable Null = MuNothing
 mkMuList :: Monad m => [Value] -> MuType m
 mkMuList = MuList . map aesonContext
 
+mkMapContext :: Monad m => HM.HashMap T.Text Value -> MuContext m
+mkMapContext hmap key =
+  return $ mkVariable $ HM.lookupDefault Null key hmap
+
 aesonContext :: Monad m => Value -> MuContext m
 aesonContext obj  =
   case obj of
-    Object o -> return . mkVariable . flip (HM.lookupDefault Null) o
+    Object o -> mkMapContext o
     _        -> emptyContext
 
 mkContext :: Monad m => String -> MuContext m
