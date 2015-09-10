@@ -43,7 +43,8 @@ library
                      , MissingH
                      , filemanip
                      , safe
-                     
+                     , filepath
+
   default-language:    Haskell2010
 
 

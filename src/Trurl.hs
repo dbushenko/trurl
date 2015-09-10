@@ -4,6 +4,7 @@ module Trurl where
 
 import GHC.Exts
 import System.Directory
+import System.FilePath
 import Network.HTTP.Conduit
 import Codec.Archive.Tar
 import Data.List hiding (find)
@@ -50,7 +51,7 @@ printFileHeader dir fp = do
   putStrLn $ headDef "No info found..." $ lines file
 
 cutExtension :: String -> String -> String
-cutExtension filePath ext = take (length filePath - length ext) filePath
+cutExtension filePath _ = dropExtension filePath
 
 cutSuffix :: String -> String -> String
 cutSuffix suffix fname =
