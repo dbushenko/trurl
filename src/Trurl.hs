@@ -70,11 +70,9 @@ getFullFileName repoDir template = repoDir ++ getFileName template
 mkVariable :: Monad m => Value -> MuType m
 mkVariable (String s) = MuVariable s
 mkVariable (Bool b) = MuBool b
-mkVariable (Number n) = let e = floatingOrInteger n
-                            mkval (Left r) = MuVariable (r :: Double)
-                            mkval (Right i) = MuVariable (i :: Integer)
-                        in mkval e
-
+mkVariable (Number n) = case floatingOrInteger n of
+                            Left r  -> MuVariable (r :: Double)
+                            Right i -> MuVariable (i :: Integer)
 mkVariable (Array ar) = mkMuList (toList ar)
 mkVariable o@(Object _) = mkMuList [o]
 mkVariable Null = MuVariable ("" :: String)
