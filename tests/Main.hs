@@ -18,10 +18,7 @@ tests = testGroup "Tests" [trurlTests, simplParamsTests]
 
 trurlTests :: TestTree
 trurlTests = testGroup "Trurl unit tests"
-  [ testCase "cutExtension" $
-      assertEqual "Checking file name without extension" "a/b" (T.cutExtension "a/b.hs")
-
-  , testCase "cutSuffix" $
+  [ testCase "cutSuffix" $
       assertEqual "Checking file name with suffix" "projectName" (T.cutSuffix "Bench.hs" "projectNameBench.hs")
 
   , testCase "cutSuffix" $
