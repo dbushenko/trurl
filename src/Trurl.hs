@@ -58,10 +58,11 @@ processTemplate projName paramsStr filePath  = do
   removeFile filePath
   return ()
 
-getFileName :: String -> String
+getFileName :: FilePath -> FilePath
 getFileName template =
-  if "." `isInfixOf` template then template
-  else template ++ ".hs"
+  if hasExtension template
+    then template
+    else template <.> "hs"
 
 getFullFileName :: String -> String -> String
 getFullFileName repoDir template = repoDir ++ getFileName template
