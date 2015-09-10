@@ -90,8 +90,8 @@ aesonContext obj  =
     Object o -> mkMapContext o
     _        -> emptyContext
 
-mkContext :: Monad m => String -> MuContext m
-mkContext =
+mkJsonContext :: Monad m => String -> MuContext m
+mkJsonContext =
   maybe emptyContext aesonContext . decode . BLC8.pack
 
 emptyContext :: Monad m => MuContext m
@@ -99,11 +99,11 @@ emptyContext = const $ return MuNothing
 
 mkProjContext :: Monad m => String -> String -> MuContext m
 mkProjContext projName paramsStr =
-  assoc "ProjectName" projName $ mkContext paramsStr
+  assoc "ProjectName" projName $ mkJsonContext paramsStr
 
 mkFileContext :: Monad m => String -> String -> MuContext m
 mkFileContext fileName paramsStr =
-  assoc "FileName" fileName $ mkContext paramsStr
+  assoc "FileName" fileName $ mkJsonContext paramsStr
 
 assoc :: (Monad m, MuVar a) => T.Text -> a -> MuContext m -> MuContext m
 assoc newKey newVal oldCtx k =
