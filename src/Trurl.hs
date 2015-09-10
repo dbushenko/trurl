@@ -152,8 +152,7 @@ createProject name project paramsStr = do
   projNamePaths <- find always (liftOp checkFileName fileName constProjectName) name
 
   -- Rename 'ProjectName' files
-  let renameProjNameFile fpath = let fname = takeFileName fpath
-                                     fdir = cutSuffix fname fpath
+  let renameProjNameFile fpath = let (fdir, fname) = splitFileName fpath
                                      newfname = replace constProjectName name fname
                                  in renameFile fpath (fdir ++ newfname)
   mapM_ renameProjNameFile projNamePaths
