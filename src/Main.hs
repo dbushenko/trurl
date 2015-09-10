@@ -33,9 +33,9 @@ main = do
     ["update"]                              -> updateFromRepository
     ["create", name, project]               -> createProject name project "{}"
     ["create", name, project, "-j", params] -> createProject name project params
-    ("create": name: project: params)       -> createProject name project $ simpleParamsToJson $ foldr (\a b -> a ++ " " ++ b) "" params
+    ("create": name: project: params)       -> createProject name project $ simpleParamsToJson $ unwords params
     ["new", name, template, "-j" ,params]   -> newTemplate name template params
-    ("new": name: template: params)         -> newTemplate name template $ simpleParamsToJson $ foldr (\a b -> a ++ " " ++ b) "" params
+    ("new": name: template: params)         -> newTemplate name template $ simpleParamsToJson $ unwords params
     ["list"]                                -> listTemplates
     ["version"]                             -> printVersion
     ["-v"]                                  -> printVersion
