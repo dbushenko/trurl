@@ -84,13 +84,16 @@ aesonContext :: Monad m => Value -> MuContext m
 aesonContext obj  =
   case obj of
     Object o -> mkStrContext $ \k -> mkVariable $ HM.lookupDefault Null (T.pack k) o
-    _        -> const $ return $ mkVariable Null
+    _        -> emptyContext
 
 mkContext :: Monad m => String -> MuContext m
 mkContext paramsStr =
   case decode $ BLC8.pack paramsStr of
-    Nothing  -> const $ return $ mkVariable Null
+    Nothing  -> emptyContext
     Just obj -> aesonContext obj
+
+emptyContext :: Monad m => MuContext m
+emptyContext = const $ return $ MuVariable ("" :: String)
 
 mkProjContext :: Monad m => String -> String -> MuContext m
 mkProjContext projName paramsStr =
