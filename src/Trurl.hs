@@ -105,7 +105,7 @@ mkFileContext :: Monad m => String -> String -> MuContext m
 mkFileContext fileName paramsStr =
   assoc "FileName" fileName $ mkContext paramsStr
 
-assoc :: Monad m => String -> String -> MuContext m -> MuContext m
+assoc :: (Monad m, MuVar a) => String -> a -> MuContext m -> MuContext m
 assoc newKey newVal oldCtx k =
   if decodeStr k == newKey
     then return $ MuVariable newVal
