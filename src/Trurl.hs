@@ -53,7 +53,7 @@ printFileHeader dir fp = do
 processTemplate :: String -> String -> String -> IO ()
 processTemplate projName paramsStr filePath  = do
   template <- T.readFile filePath
-  generated <- hastacheStr defaultConfig template (mkStrContext (mkProjContext projName paramsStr))
+  generated <- hastacheStr defaultConfig template (mkProjContext projName paramsStr)
   TL.writeFile (dropExtension filePath) generated
   removeFile filePath
   return ()
@@ -88,20 +88,25 @@ aesonContext obj k  =
     (Object o) -> mkVariable $ HM.lookupDefault Null (T.pack k) o
     _          -> mkVariable Null
 
-mkContext :: Monad m => String -> String -> MuType m
-mkContext paramsStr key =
-  case decode $ BLC8.pack paramsStr of
+mkContext :: Monad m => String -> MuContext m
+mkContext paramsStr =
+  mkStrContext $ \key -> case decode $ BLC8.pack paramsStr of
     Nothing  -> MuVariable ("" :: String)
     Just obj -> aesonContext obj key
 
-mkProjContext :: Monad m => String -> String -> String -> MuType m
-mkProjContext projName _ "ProjectName" = MuVariable projName
-mkProjContext _ paramsStr key             = mkContext paramsStr key
+mkProjContext :: Monad m => String -> String -> MuContext m
+mkProjContext projName paramsStr =
+  assoc "ProjectName" projName $ mkContext paramsStr
 
+mkFileContext :: Monad m => String -> String -> MuContext m
+mkFileContext fileName paramsStr =
+  assoc "FileName" fileName $ mkContext paramsStr
 
-mkFileContext :: Monad m => String -> String -> String -> MuType m
-mkFileContext fname _ "FileName" = MuVariable fname
-mkFileContext _ paramsStr key     = mkContext paramsStr key
+assoc :: Monad m => String -> String -> MuContext m -> MuContext m
+assoc newKey newVal oldCtx k =
+  if decodeStr k == newKey
+    then return $ MuVariable newVal
+    else oldCtx k
 
 -------------------------------------
 -- API
@@ -166,7 +171,7 @@ newTemplate name templateName paramsStr = do
   repoDir <- getLocalRepoDir
   let templPath = getFullFileName repoDir templateName
   template <- T.readFile templPath
-  generated <- hastacheStr defaultConfig template (mkStrContext (mkFileContext name paramsStr))
+  generated <- hastacheStr defaultConfig template (mkFileContext name paramsStr)
   TL.writeFile (getFileName name) generated
 
 -- Команда "list"
