@@ -56,11 +56,7 @@ cutSuffix suffix fname =
   else fname
 
 extractFileNameFromPath :: String -> String
-extractFileNameFromPath fpath =
-  let mn = elemIndex '/' $ reverse fpath
-      extractExt Nothing = fpath
-      extractExt (Just n) = drop ((length fpath) - n) fpath
-  in extractExt mn
+extractFileNameFromPath = takeFileName
 
 processTemplate :: String -> String -> String -> IO ()
 processTemplate projName paramsStr filePath  = do
