@@ -83,7 +83,7 @@ mkMuList = MuList . map aesonContext
 aesonContext :: Monad m => Value -> MuContext m
 aesonContext obj  =
   case obj of
-    Object o -> mkStrContext $ \k -> mkVariable $ HM.lookupDefault Null (T.pack k) o
+    Object o -> return . mkVariable . flip (HM.lookupDefault Null) o
     _        -> emptyContext
 
 mkContext :: Monad m => String -> MuContext m
