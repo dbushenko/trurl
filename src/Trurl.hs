@@ -87,10 +87,8 @@ aesonContext obj  =
     _        -> emptyContext
 
 mkContext :: Monad m => String -> MuContext m
-mkContext paramsStr =
-  case decode $ BLC8.pack paramsStr of
-    Nothing  -> emptyContext
-    Just obj -> aesonContext obj
+mkContext =
+  maybe emptyContext aesonContext . decode . BLC8.pack
 
 emptyContext :: Monad m => MuContext m
 emptyContext = const $ return $ MuVariable ("" :: String)
