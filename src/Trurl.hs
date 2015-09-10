@@ -55,9 +55,6 @@ cutSuffix suffix fname =
   if endswith suffix fname then take (length fname - length suffix) fname
   else fname
 
-extractFileNameFromPath :: String -> String
-extractFileNameFromPath = takeFileName
-
 processTemplate :: String -> String -> String -> IO ()
 processTemplate projName paramsStr filePath  = do
   template <- T.readFile filePath
@@ -155,7 +152,7 @@ createProject name project paramsStr = do
   projNamePaths <- find always (liftOp checkFileName fileName constProjectName) name
 
   -- Rename 'ProjectName' files
-  let renameProjNameFile fpath = let fname = extractFileNameFromPath fpath
+  let renameProjNameFile fpath = let fname = takeFileName fpath
                                      fdir = cutSuffix fname fpath
                                      newfname = replace constProjectName name fname
                                  in renameFile fpath (fdir ++ newfname)

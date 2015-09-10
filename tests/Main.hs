@@ -24,12 +24,6 @@ trurlTests = testGroup "Trurl unit tests"
   , testCase "cutSuffix" $
       assertEqual "Checking file name without suffix" "projectNameBench.hs" (T.cutSuffix "Bench.hs123" "projectNameBench.hs")
 
-  , testCase "extractFileNameFromPath" $
-      assertEqual "Checking file name in directory" "my.hs" (T.extractFileNameFromPath "e/f/my.hs")
-
-  , testCase "extractFileNameFromPath" $
-      assertEqual "Checking file name without directory" "my.hs" (T.extractFileNameFromPath "my.hs")
-
   , testCase "getFullFileName" $
       assertEqual "Checking full template path" "a/b.hs" (T.getFullFileName "a/" "b")
 
