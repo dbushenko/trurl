@@ -4,7 +4,7 @@ module Main where
 
 import Test.Tasty
 import Test.Tasty.HUnit
-import Text.Hastache 
+import Text.Hastache
 import Text.Hastache.Context
 
 import qualified Trurl as T
@@ -26,10 +26,10 @@ trurlTests = testGroup "Trurl unit tests"
 
   , testCase "extractFileNameFromPath" $
       assertEqual "Checking file name in directory" "my.hs" (T.extractFileNameFromPath "e/f/my.hs")
-      
+
   , testCase "extractFileNameFromPath" $
       assertEqual "Checking file name without directory" "my.hs" (T.extractFileNameFromPath "my.hs")
-      
+
   , testCase "getFullFileName" $
       assertEqual "Checking full template path" "a/b.hs" (T.getFullFileName "a/" "b")
 
@@ -81,7 +81,7 @@ simplParamsTests = testGroup "Trurl unit tests"
       assertEqual "Checking parseEmbedded" "{\"name\":\"abc\",\"type\":\"efg\",\"last\":true}" (S.parseEmbedded "abc#efg@")
 
   , testCase "simpleParamsToJson" $
-      assertEqual "Checking simpleParamsToJson" 
+      assertEqual "Checking simpleParamsToJson"
                   "{\"abc\":123,\"efg\":456,\"zxc\":[1,2,3],\"ttt\":[{\"name\":\"abc\",\"type\":\"efg\"},{\"name\":\"hck\",\"type\":\"qwe\"},{\"name\":\"zxc\",\"type\":\"vbn\",\"last\":true}]}"
                   (S.simpleParamsToJson "abc:123,efg:456,zxc:[1,2,3],ttt:[abc#efg,hck#qwe,zxc#vbn@]")
   ]

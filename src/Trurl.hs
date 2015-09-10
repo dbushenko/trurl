@@ -94,7 +94,7 @@ mkMuList :: Monad m => [Value] -> MuType m
 mkMuList = MuList . map (mkStrContext . aesonContext)
 
 aesonContext :: Monad m => Value -> String -> MuType m
-aesonContext obj k  = 
+aesonContext obj k  =
   case obj of
     (Object o) -> mkVariable $ HM.lookupDefault Null (T.pack k) o
     _          -> mkVariable Null
