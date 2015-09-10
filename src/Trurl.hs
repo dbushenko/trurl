@@ -47,7 +47,7 @@ printFile dir fp = do
 printFileHeader :: FilePath -> FilePath -> IO ()
 printFileHeader dir fp = do
   file <- readFile (dir ++ fp)
-  putStrLn $ headDef "No info found..." $ split "\n" file
+  putStrLn $ headDef "No info found..." $ lines file
 
 cutExtension :: String -> String -> String
 cutExtension filePath ext = take (length filePath - length ext) filePath
