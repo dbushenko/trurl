@@ -88,6 +88,12 @@ assoc newKey newVal oldCtx k =
     then return $ MuVariable newVal
     else oldCtx k
 
+substituteProjectName :: String -> FilePath -> FilePath
+substituteProjectName projectName path  =
+  let (dirName, fileName) = splitFileName path
+      newFileName = replace constProjectName projectName fileName
+   in dirName </> newFileName
+
 -------------------------------------
 -- API
 --
@@ -133,9 +139,7 @@ createProject name project paramsStr = do
   projNamePaths <- find always (liftOp checkFileName fileName constProjectName) name
 
   -- Rename 'ProjectName' files
-  let renameProjNameFile fpath = let (fdir, fname) = splitFileName fpath
-                                     newfname = replace constProjectName name fname
-                                 in renameFile fpath (fdir ++ newfname)
+  let renameProjNameFile fpath = renameFile fpath (substituteProjectName name fpath)
   mapM_ renameProjNameFile projNamePaths
 
 
