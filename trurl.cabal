@@ -38,6 +38,7 @@ library
                      , tar
                      , hastache
                      , aeson
+                     , hastache-aeson
                      , scientific
                      , unordered-containers
                      , MissingH
