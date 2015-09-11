@@ -70,10 +70,10 @@ getFullFileName repoDir template = repoDir ++ getFileName template
 
 mkJsonContext :: Monad m => String -> MuContext m
 mkJsonContext =
-  maybe emptyContext jsonValueContext . decode . BLC8.pack
+  maybe mkEmptyContext jsonValueContext . decode . BLC8.pack
 
-emptyContext :: Monad m => MuContext m
-emptyContext = const $ return MuNothing
+mkEmptyContext :: Monad m => MuContext m
+mkEmptyContext = const $ return MuNothing
 
 mkProjContext :: Monad m => String -> String -> MuContext m
 mkProjContext projName paramsStr =
