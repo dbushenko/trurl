@@ -10,6 +10,7 @@ import Codec.Archive.Tar
 import Data.List hiding (find)
 import Text.Hastache
 import Text.Hastache.Context
+import Text.Hastache.Aeson
 import Data.Aeson
 import Data.Scientific
 import Data.String.Utils
@@ -85,10 +86,7 @@ mkMapContext hmap key =
   return $ mkVariable $ HM.lookupDefault Null key hmap
 
 aesonContext :: Monad m => Value -> MuContext m
-aesonContext obj  =
-  case obj of
-    Object o -> mkMapContext o
-    _        -> emptyContext
+aesonContext = jsonValueContext
 
 mkJsonContext :: Monad m => String -> MuContext m
 mkJsonContext =
