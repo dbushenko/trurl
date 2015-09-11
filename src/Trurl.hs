@@ -81,10 +81,6 @@ mkVariable Null = MuNothing
 mkMuList :: Monad m => [Value] -> MuType m
 mkMuList = MuList . map aesonContext
 
-mkMapContext :: Monad m => HM.HashMap T.Text Value -> MuContext m
-mkMapContext hmap key =
-  return $ mkVariable $ HM.lookupDefault Null key hmap
-
 aesonContext :: Monad m => Value -> MuContext m
 aesonContext = jsonValueContext
 
