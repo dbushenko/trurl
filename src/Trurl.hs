@@ -68,12 +68,9 @@ getFileName template =
 getFullFileName :: String -> String -> String
 getFullFileName repoDir template = repoDir ++ getFileName template
 
-aesonContext :: Monad m => Value -> MuContext m
-aesonContext = jsonValueContext
-
 mkJsonContext :: Monad m => String -> MuContext m
 mkJsonContext =
-  maybe emptyContext aesonContext . decode . BLC8.pack
+  maybe emptyContext jsonValueContext . decode . BLC8.pack
 
 emptyContext :: Monad m => MuContext m
 emptyContext = const $ return MuNothing
