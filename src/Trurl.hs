@@ -53,8 +53,7 @@ printFileHeader dir fp = do
 
 processTemplate :: String -> String -> String -> IO ()
 processTemplate projName paramsStr filePath  = do
-  template <- T.readFile filePath
-  generated <- hastacheStr defaultConfig template (mkProjContext projName paramsStr)
+  generated <- hastacheFile defaultConfig filePath (mkProjContext projName paramsStr)
   TL.writeFile (dropExtension filePath) generated
   removeFile filePath
   return ()
@@ -151,8 +150,7 @@ newTemplate :: String -> String -> String -> IO ()
 newTemplate name templateName paramsStr = do
   repoDir <- getLocalRepoDir
   let templPath = getFullFileName repoDir templateName
-  template <- T.readFile templPath
-  generated <- hastacheStr defaultConfig template (mkFileContext name paramsStr)
+  generated <- hastacheFile defaultConfig templPath (mkFileContext name paramsStr)
   TL.writeFile (getFileName name) generated
 
 -- Команда "list"
