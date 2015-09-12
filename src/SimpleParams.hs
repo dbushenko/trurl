@@ -39,4 +39,4 @@ simpleParamsToJson sparams =
          . (replace "}" " } ")
          . (replace ":" " : ")
          $ sparams
-  in "{" ++  (foldl (++) "" $ map processPart  $ splitWs s) ++ "}"
+  in "{" ++  (concatMap processPart $ splitWs s) ++ "}"
