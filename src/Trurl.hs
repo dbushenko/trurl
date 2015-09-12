@@ -36,7 +36,7 @@ mainRepo = "https://github.com/dbushenko/trurl/raw/master/repository/" ++ mainRe
 templateExt :: String
 templateExt = ".template"
 
-getLocalRepoDir :: IO String
+getLocalRepoDir :: IO FilePath
 getLocalRepoDir = do
   home <- getHomeDirectory
   return $ home ++ "/.trurl/repo/"
@@ -51,7 +51,7 @@ printFileHeader dir fp = do
   file <- readFile (dir ++ fp)
   putStrLn $ headDef "No info found..." $ lines file
 
-processTemplate :: String -> String -> String -> IO ()
+processTemplate :: String -> String -> FilePath -> IO ()
 processTemplate projName paramsStr filePath  = do
   generated <- hastacheFile defaultConfig filePath (mkProjContext projName paramsStr)
   TL.writeFile (dropExtension filePath) generated
@@ -64,7 +64,7 @@ getFileName template =
     then template
     else template <.> "hs"
 
-getFullFileName :: String -> String -> String
+getFullFileName :: FilePath -> String -> FilePath
 getFullFileName repoDir template = repoDir ++ getFileName template
 
 mkJsonContext :: Monad m => String -> MuContext m
@@ -78,7 +78,7 @@ mkProjContext :: Monad m => String -> String -> MuContext m
 mkProjContext projName paramsStr =
   assoc "ProjectName" projName $ mkJsonContext paramsStr
 
-mkFileContext :: Monad m => String -> String -> MuContext m
+mkFileContext :: Monad m => FilePath -> String -> MuContext m
 mkFileContext fileName paramsStr =
   assoc "FileName" fileName $ mkJsonContext paramsStr
 
