@@ -24,7 +24,7 @@ processPart str =
      then str
      else if symb `elem` specialCharacters
           then str
-          else if "#" `isInfixOf` str
+          else if '#' `elem` str
                then parseEmbedded str
                else "\"" ++ str ++ "\""
 
