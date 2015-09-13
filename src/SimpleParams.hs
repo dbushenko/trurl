@@ -20,10 +20,12 @@ parseEmbedded str =
 processPart :: String -> String
 processPart str =
   let symb = headDef ' ' str
-  in if isDigit symb then str
+  in if isDigit symb
+     then str
      else if symb `elem` specialCharacters
-             then str
-          else if "#" `isInfixOf` str then parseEmbedded str
+          then str
+          else if "#" `isInfixOf` str
+               then parseEmbedded str
                else "\"" ++ str ++ "\""
 
 simpleParamsToJson :: String -> String
