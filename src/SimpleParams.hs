@@ -28,7 +28,10 @@ processPart str
 
 simpleParamsToJson :: String -> String
 simpleParamsToJson sparams =
-  "{" ++  (concatMap processPart $ split (dropBlanks $ oneOf specialCharacters) sparams) ++ "}"
+    "{" ++  concatMap processPart (splitOnSpecialCharacters sparams) ++ "}"
+
+splitOnSpecialCharacters :: String -> [String]
+splitOnSpecialCharacters = split $ dropBlanks $ oneOf specialCharacters
 
 specialCharacters :: [Char]
 specialCharacters = ",:[]{}"
