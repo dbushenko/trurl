@@ -18,15 +18,13 @@ parseEmbedded str =
     _ -> ""
 
 processPart :: String -> String
-processPart str =
-  let symb = headDef ' ' str
-  in if isDigit symb
-     then str
-     else if symb `elem` specialCharacters
-          then str
-          else if '#' `elem` str
-               then parseEmbedded str
-               else "\"" ++ str ++ "\""
+processPart str
+    | isDigit symb                  = str
+    | symb `elem` specialCharacters = str
+    | '#'  `elem` str               = parseEmbedded str
+    | otherwise                     = "\"" ++ str ++ "\""
+  where
+    symb = headDef ' ' str
 
 simpleParamsToJson :: String -> String
 simpleParamsToJson sparams =
