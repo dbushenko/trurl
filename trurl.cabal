@@ -45,6 +45,7 @@ library
                      , filemanip
                      , safe
                      , filepath
+                     , split
 
   default-language:    Haskell2010
 
