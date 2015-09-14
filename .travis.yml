@@ -1,0 +1,24 @@
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.stack
+
+matrix:
+  include:
+  - env: GHCVER=7.10.2 STACK_YAML=stack.yaml
+    addons:
+      apt:
+        sources: [hvr-ghc]
+        packages: [ghc-7.10.2]
+
+before_install:
+  - mkdir -p ~/.local/bin
+  - export PATH=/opt/ghc/$GHCVER/bin:$HOME/.local/bin:$PATH
+  - travis_retry curl -L https://github.com/commercialhaskell/stack/releases/download/v0.1.2.0/stack-0.1.2.0-x86_64-linux.gz | gunzip > ~/.local/bin/stack
+  - chmod a+x ~/.local/bin/stack
+
+script:
+  - stack --no-terminal --skip-ghc-check setup
+  - stack --no-terminal --skip-ghc-check build --ghc-options "-Wall -Werror"
+  - stack --no-terminal --skip-ghc-check test  --ghc-options "-Wall -Werror"
