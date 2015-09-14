@@ -1,5 +1,7 @@
 # Overview
 
+[![Build Status](https://travis-ci.org/dbushenko/trurl.png?branch=master)](https://travis-ci.org/dbushenko/trurl)
+
 Trurl is a haskell scaffolding tool named after great hyper-space engineer-constructor Trurl who (with his friend Klapaucius) is the hero of Stanislaw Lem's fiction.
 
 ![Trurl](https://raw.githubusercontent.com/dbushenko/trurl/master/img/trurl.jpg "Trurl")
