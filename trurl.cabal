@@ -39,7 +39,6 @@ library
                      , hastache
                      , aeson
                      , hastache-aeson
-                     , scientific
                      , unordered-containers
                      , MissingH
                      , filemanip
