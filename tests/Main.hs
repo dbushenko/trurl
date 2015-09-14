@@ -5,7 +5,6 @@ module Main where
 import Test.Tasty
 import Test.Tasty.HUnit
 import Text.Hastache
-import Text.Hastache.Context
 
 import qualified Trurl as T
 import qualified SimpleParams as S
