@@ -74,8 +74,8 @@ mkProjContext projName paramsStr =
   assoc "ProjectName" projName $ mkJsonContext paramsStr
 
 mkFileContext :: Monad m => FilePath -> String -> MuContext m
-mkFileContext fileName paramsStr =
-  assoc "FileName" fileName $ mkJsonContext paramsStr
+mkFileContext fname paramsStr =
+  assoc "FileName" fname $ mkJsonContext paramsStr
 
 assoc :: (Monad m, MuVar a) => T.Text -> a -> MuContext m -> MuContext m
 assoc newKey newVal oldCtx k =
@@ -84,9 +84,9 @@ assoc newKey newVal oldCtx k =
     else oldCtx k
 
 substituteProjectName :: String -> FilePath -> FilePath
-substituteProjectName projectName path  =
-  let (dirName, fileName) = splitFileName path
-      newFileName = replace constProjectName projectName fileName
+substituteProjectName projectName filePath  =
+  let (dirName, oldFileName) = splitFileName filePath
+      newFileName = replace constProjectName projectName oldFileName
    in dirName </> newFileName
 
 -------------------------------------
