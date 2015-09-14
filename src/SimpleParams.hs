@@ -2,7 +2,6 @@
 
 module SimpleParams where
 
-import Data.List hiding (find)
 import Data.List.Split
 import Data.String.Utils (endswith, replace)
 import Safe
