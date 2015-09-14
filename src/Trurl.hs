@@ -2,27 +2,22 @@
 
 module Trurl where
 
-import GHC.Exts
 import System.Directory
 import System.FilePath
 import Network.HTTP.Conduit
 import Codec.Archive.Tar
 import Data.List hiding (find)
 import Text.Hastache
-import Text.Hastache.Context
 import Text.Hastache.Aeson
 import Data.Aeson
-import Data.Scientific
 import Data.String.Utils
 import System.FilePath.Find (find, always, fileName, extension, (==?), liftOp)
 import Safe
 
 import qualified Data.Text as T
-import qualified Data.Text.IO as T
 import qualified Data.Text.Lazy.IO as TL
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.ByteString.Lazy.Char8 as BLC8
-import qualified Data.HashMap.Strict as HM
 
 constProjectName :: String
 constProjectName = "ProjectName"
