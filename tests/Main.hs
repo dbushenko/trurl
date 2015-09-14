@@ -71,4 +71,10 @@ simplParamsTests = testGroup "Trurl unit tests"
       assertEqual "Checking simpleParamsToJson"
                   "{\"abc\":123,\"efg\":456,\"zxc\":[1,2,3],\"ttt\":[{\"name\":\"abc\",\"type\":\"efg\"},{\"name\":\"hck\",\"type\":\"qwe\"},{\"name\":\"zxc\",\"type\":\"vbn\",\"last\":true}]}"
                   (S.simpleParamsToJson "abc:123,efg:456,zxc:[1,2,3],ttt:[abc#efg,hck#qwe,zxc#vbn@]")
+
+  , testCase "simple params with a space" $
+      assertEqual "Checking simple params with a space"
+                  "{\"props\":[{\"name\":\"cover\",\"type\":\"Text\"}, {\"name\":\"year\",\"type\":\"Integer\",\"last\":true}]}"
+                  (S.simpleParamsToJson "props:[cover#Text, year#Integer@]")
+
   ]

@@ -33,4 +33,4 @@ splitOnSpecialCharacters :: String -> [String]
 splitOnSpecialCharacters = split $ dropBlanks $ oneOf specialCharacters
 
 specialCharacters :: [Char]
-specialCharacters = ",:[]{}"
+specialCharacters = ",:[]{} "
