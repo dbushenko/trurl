@@ -40,10 +40,10 @@ Just run 'trurl' to see the help:
 
     trurl <command> [parameters]
       update -- fetch the updates from repository
-      create <name> <project_template> -j [parameters_string] -- create project of specified type with specified name; optionally add JSON parameters, wrap it with \"\" or ''
-      create <name> <project_template> [parameters] -- create project of specified type with specified name; optionally add parameters
-      new <name> <file_template> -j [parameters_string] -- create file from the template with specified JSON parameters, wrap it with "" or ''
-      new <name> <file_template> [parameters] -- create file from the template with specified string parameters
+      new project <name> <project_template> -j [parameters_string] -- create project of specified type with specified name; optionally add JSON parameters, wrap it with \"\" or ''
+      new project <name> <project_template> [parameters] -- create project of specified type with specified name; optionally add parameters
+      new file <name> <file_template> -j [parameters_string] -- create file from the template with specified JSON parameters, wrap it with "" or ''
+      new file <name> <file_template> [parameters] -- create file from the template with specified string parameters
       list -- print all available templates
       help <template> -- print template info
       help -- print this help
