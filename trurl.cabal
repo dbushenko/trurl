@@ -1,5 +1,5 @@
 name:                trurl
-version:             0.3.1.0
+version:             0.4.0.0
 synopsis:            Haskell template code generator
 description:
     Trurl is a haskell project and code generating utility. Use it for scaffolding your projects and entities.

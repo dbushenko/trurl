@@ -21,7 +21,7 @@ help = do
   putStrLn "  version -- print version"
 
 printVersion :: IO ()
-printVersion = putStrLn "0.3.0.x"
+printVersion = putStrLn "0.4.0.x"
 
 main :: IO ()
 main = do
@@ -38,5 +38,6 @@ main = do
     ("new file": name: template: params)    -> newTemplate name template $ simpleParamsToJson $ unwords params
     ["list"]                                -> listTemplates
     ["version"]                             -> printVersion
+    ["--version"]                           -> printVersion
     ["-v"]                                  -> printVersion
     _                                       -> putStrLn "Unknown command"
