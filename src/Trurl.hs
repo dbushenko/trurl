@@ -13,20 +13,20 @@ import Data.Aeson
 import Data.String.Utils
 import System.FilePath.Find (find, always, fileName, extension, (==?), liftOp)
 import Safe
+import Control.Monad
 
 import qualified Data.Text as T
 import qualified Data.Text.Lazy.IO as TL
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.ByteString.Lazy.Char8 as BLC8
 
+import Registry
+
 constProjectName :: String
 constProjectName = "ProjectName"
 
-mainRepoFile :: String
-mainRepoFile = "mainRepo.tar"
-
-mainRepo :: String
-mainRepo = "https://github.com/dbushenko/trurl/raw/master/repository/" ++ mainRepoFile
+registryUrl :: String
+registryUrl = "https://github.com/dbushenko/trurl/raw/master/repository/registry.json"
 
 templateExt :: String
 templateExt = ".template"
@@ -89,24 +89,32 @@ substituteProjectName projectName filePath  =
       newFileName = replace constProjectName projectName oldFileName
    in dirName </> newFileName
 
+downloadTemplate :: String -> Registry -> IO ()
+downloadTemplate repoDir (Registry url tname mname) = do
+    let tFile = repoDir ++ tname
+        mFile = repoDir ++ mname
+    simpleHttp (url ++ tname) >>= BL.writeFile tFile
+    simpleHttp (url ++ mname) >>= BL.writeFile mFile
+
 -------------------------------------
 -- API
 --
 
 -- Команда "update"
 -- 1) Создать $HOME/.trurl/repo
--- 2) Забрать из репозитория свежий tar-архив с апдейтами
--- 3) Распаковать его в $HOME/.trurl/repo
+-- 2) Забрать из репозитория реестр шаблонов
+-- 3) Распарсить реестр как json
+-- 4) Для каждого элемента реестра скачать шаблон и metainfo
 --
 updateFromRepository :: IO ()
 updateFromRepository = do
   repoDir <- getLocalRepoDir
   createDirectoryIfMissing True repoDir
-  let tarFile = repoDir ++ mainRepoFile
-  simpleHttp mainRepo >>= BL.writeFile tarFile
-  extract repoDir tarFile
-  removeFile tarFile
-
+  regFile <- simpleHttp registryUrl
+  case eitherDecode regFile :: Either String [Registry] of
+      Left msg -> putStrLn $ "Can't parse registry file!\n" ++ msg
+      Right registry -> mapM_ (downloadTemplate repoDir) registry
+  
 -- Команда "create <name> <project> [parameters]"
 -- 1) Найти в $HOME/.trurl/repo архив с именем project.tar
 -- 2) Создать директорию ./name

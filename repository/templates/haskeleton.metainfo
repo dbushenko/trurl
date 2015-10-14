@@ -1,0 +1,13 @@
+haskeleton -- [create] generic haskell project skeleton
+
+The template is imported from https://github.com/tfausak/haskeleton
+
+Create a new project like this:
+
+trurl create MyNewProject haskeleton '{"author":"Ivan Pupkin", "email":"i.pupkin@gmail.com"}'
+
+or like this:
+
+trurl create MyNewProject haskeleton 'author:Ivan_Pupkin, email:i.pupkin@gmail.com'
+
+Pay attention, the name of the project should start from upper case!
