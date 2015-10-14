@@ -93,8 +93,10 @@ downloadTemplate :: String -> Registry -> IO ()
 downloadTemplate repoDir (Registry url tname mname) = do
     let tFile = repoDir ++ tname
         mFile = repoDir ++ mname
-    simpleHttp (url ++ tname) >>= BL.writeFile tFile
-    simpleHttp (url ++ mname) >>= BL.writeFile mFile
+        fullUrl = if endswith "/" url then url else url ++ "/"
+    putStrLn $ "Fetching " ++ fullUrl ++ tname
+    simpleHttp (fullUrl ++ tname) >>= BL.writeFile tFile
+    simpleHttp (fullUrl ++ mname) >>= BL.writeFile mFile
 
 -------------------------------------
 -- API
@@ -110,6 +112,7 @@ updateFromRepository :: IO ()
 updateFromRepository = do
   repoDir <- getLocalRepoDir
   createDirectoryIfMissing True repoDir
+  putStrLn "Fetching registry..."
   regFile <- simpleHttp registryUrl
   case eitherDecode regFile :: Either String [Registry] of
       Left msg -> putStrLn $ "Can't parse registry file!\n" ++ msg
