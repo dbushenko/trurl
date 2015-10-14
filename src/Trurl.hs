@@ -13,7 +13,6 @@ import Data.Aeson
 import Data.String.Utils
 import System.FilePath.Find (find, always, fileName, extension, (==?), liftOp)
 import Safe
-import Control.Monad
 
 import qualified Data.Text as T
 import qualified Data.Text.Lazy.IO as TL
@@ -90,10 +89,10 @@ substituteProjectName projectName filePath  =
    in dirName </> newFileName
 
 downloadTemplate :: String -> Registry -> IO ()
-downloadTemplate repoDir (Registry url tname mname) = do
+downloadTemplate repoDir (Registry u tname mname) = do
     let tFile = repoDir ++ tname
         mFile = repoDir ++ mname
-        fullUrl = if endswith "/" url then url else url ++ "/"
+        fullUrl = if endswith "/" u then u else u ++ "/"
     putStrLn $ "Fetching " ++ fullUrl ++ tname
     simpleHttp (fullUrl ++ tname) >>= BL.writeFile tFile
     simpleHttp (fullUrl ++ mname) >>= BL.writeFile mFile
@@ -157,9 +156,9 @@ createProject name project paramsStr = do
 -- 4) Записать файл в ./
 --
 newTemplate :: String -> String -> String -> IO ()
-newTemplate name templateName paramsStr = do
+newTemplate name tName paramsStr = do
   repoDir <- getLocalRepoDir
-  let templPath = getFullFileName repoDir templateName
+  let templPath = getFullFileName repoDir tName
   generated <- hastacheFile defaultConfig templPath (mkFileContext name paramsStr)
   TL.writeFile (getFileName name) generated
 
