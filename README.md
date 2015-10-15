@@ -14,25 +14,14 @@ Build it from source using cabal:
 
     git clone https://github.com/dbushenko/trurl.git
     cd trurl
-    cabal sandbox init
-    cabal install --dependencies-only
-    cabal build
-    cabal install
-
-Or install it from the repository:
-
-    cabal update
-    cabal install trurl-0.3.1.0
+    stack build
+    stack install
 
 ## Quick Start
 
-Run following comments to create a scotty/mysql project:
+Run following to create a template project:
 
-    trurl create MyProject scotty-mysql
-
-Go to MyProject/src, run following command to generate entity Comment:
-
-    trurl new Comment scotty-entity 'props:[comment#String, author#String@]'
+    trurl create MyProject haskeleton
 
 ## Usage
 
@@ -52,8 +41,8 @@ Just run 'trurl' to see the help:
 * Command 'update' fetches all the latest templates from the repository. Run it before using any other command.
 * Command 'list' shows available templates. Technically it finds all the files *.metainfo in $HOME/.trurl/repo and prints thir first lines.
 * Command 'help <template>' prints detailed info about the template.
-* Command 'create' intended to generate projects, just specify an available project template name. You may also sepcify optional parameters. In any case at least one parameter will be available in project template -- 'ProjectName' which corresponds to the provided <name> parameter.
-* Command 'new' generates template file, generated file will be named as specified in 'name'. It uses Mustache format in templates and accepts mandatory parameters. In any case at least one parameter will be available in the file template -- 'FileName' which corresponds to the provided <name> parameter.
+* Command 'new project' intended to generate projects, just specify an available project template name. You may also sepcify optional parameters. In any case at least one parameter will be available in project template -- 'ProjectName' which corresponds to the provided <name> parameter.
+* Command 'new file' generates template file, generated file will be named as specified in 'name'. It uses Mustache format in templates and accepts mandatory parameters. In any case at least one parameter will be available in the file template -- 'FileName' which corresponds to the provided <name> parameter.
 
 Parameters for commands 'create' and 'new' may be of two types: JSON and simple string.
 
