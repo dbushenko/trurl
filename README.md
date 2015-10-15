@@ -10,7 +10,7 @@ The tool is able to create template projects of any type and template files of a
 
 ## Installation
 
-Build it from source using cabal:
+Build it from source using stack:
 
     git clone https://github.com/dbushenko/trurl.git
     cd trurl
