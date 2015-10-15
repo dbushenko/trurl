@@ -21,7 +21,7 @@ Build it from source using stack:
 
 Run following to create a template project:
 
-    trurl create MyProject haskeleton
+    trurl new project MyProject haskeleton
 
 ## Usage
 
@@ -44,7 +44,7 @@ Just run 'trurl' to see the help:
 * Command 'new project' intended to generate projects, just specify an available project template name. You may also sepcify optional parameters. In any case at least one parameter will be available in project template -- 'ProjectName' which corresponds to the provided <name> parameter.
 * Command 'new file' generates template file, generated file will be named as specified in 'name'. It uses Mustache format in templates and accepts mandatory parameters. In any case at least one parameter will be available in the file template -- 'FileName' which corresponds to the provided <name> parameter.
 
-Parameters for commands 'create' and 'new' may be of two types: JSON and simple string.
+Parameters for commands 'new project' and 'new file' may be of two types: JSON and simple string.
 
 * JSON parameters might look like this: '{"entityName": "Article", "params": [ {"name":"title","type":"String"}, {"name":"body", "type":"String"}]}"
 * Totally the same simple string looks like this: 'entityName:Article, params: [ title#String, body#String ]'

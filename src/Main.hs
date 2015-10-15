@@ -11,10 +11,10 @@ help :: IO ()
 help = do
   putStrLn "trurl <command> [parameters]"
   putStrLn "  update -- fetch the updates from repository"
-  putStrLn "  new project <name> <project_template> -j [parameters_string] -- create project of specified type with specified name; optionally add JSON parameters, wrap it with \"\" or ''"
   putStrLn "  new project <name> <project_template> [parameters] -- create project of specified type with specified name; optionally add parameters"
-  putStrLn "  new file <name> <file_template> -j [parameters_string] -- create file from the template with specified JSON parameters, wrap it with \"\" or ''"
+  putStrLn "  new project <name> <project_template> -j [parameters_string] -- create project of specified type with specified name; optionally add JSON parameters, wrap it with \"\" or ''"
   putStrLn "  new file <name> <file_template> [parameters] -- create file from the template with specified string parameters"
+  putStrLn "  new file <name> <file_template> -j [parameters_string] -- create file from the template with specified JSON parameters, wrap it with \"\" or ''"
   putStrLn "  list -- print all available templates"
   putStrLn "  help <template> -- print template info"
   putStrLn "  help -- print this help"
