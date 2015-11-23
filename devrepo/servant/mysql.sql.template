@@ -1,0 +1,10 @@
+create database {{ProjectName}};
+grant all on {{ProjectName}}.* on {{ProjectName}}@localhost identified by '{{ProjectName}}';
+
+flush privileges;
+
+use {{ProjectName}};
+create table `user` (id int auto_increment primary key, login varchar(128) unique not null, password varchar(128) not null);
+
+-- The `user` table contains one user with login 'user' and password 'password'
+insert into `user`(`login`, `password`) values('user', md5('my-salt-123password'));

@@ -1,0 +1,75 @@
+name:                {{ProjectName}}
+version:             0.1.0.0
+synopsis:            Initial project template from stack
+description:         Please see README.md
+homepage:            http://github.com/githubuser/{{ProjectName}}#readme
+license:             BSD3
+license-file:        LICENSE
+author:              Author name here
+maintainer:          example@example.com
+copyright:           2010 Author Here
+category:            Web
+build-type:          Simple
+-- extra-source-files:
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     Lib
+                     , Auth.AuthHeader
+                     , Auth.DbAuth
+                     , AppConfig
+                     , Db.Common                     
+                     , Json.User
+                     , Db.User
+                     , Convert.UserConverter
+                     
+                     
+  build-depends:       base >= 4.7 && < 5
+                     , HTTP
+                     , word8
+                     , aeson
+                     , base64-bytestring
+                     , bytestring
+                     , configurator
+                     , http-types
+                     , mysql
+                     , persistent
+                     , persistent-template
+                     , persistent-mysql
+                     , resource-pool
+                     , text
+                     , utf8-string
+                     , wai
+                     , wai-middleware-static
+                     , wai-extra
+                     , warp
+                     , monad-logger
+                     , MissingH
+                     , transformers
+                     , servant
+                     , servant-server
+                     , either
+  
+  default-language:    Haskell2010
+
+executable {{ProjectName}}-exe
+  hs-source-dirs:      app
+  main-is:             Main.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , {{ProjectName}}                     
+  default-language:    Haskell2010
+
+test-suite {{ProjectName}}-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Spec.hs
+  build-depends:       base
+                     , {{ProjectName}}
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  default-language:    Haskell2010
+
+source-repository head
+  type:     git
+  location: https://github.com/githubuser/{{ProjectName}}

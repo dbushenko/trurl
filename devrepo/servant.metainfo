@@ -1,0 +1,7 @@
+servant -- [new project] scaffolding for web-service with Servant
+
+Create project like this:
+
+$ trurl new project MyProj servant
+
+Use mysql.sql to create a database for the generated project.
