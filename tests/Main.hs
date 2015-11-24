@@ -17,16 +17,7 @@ tests = testGroup "Tests" [trurlTests, simplParamsTests]
 
 trurlTests :: TestTree
 trurlTests = testGroup "Trurl unit tests"
-  [ testCase "getFullFileName" $
-      assertEqual "Checking full template path" "a/b.hs" (T.getFullFileName "a/" "b")
-
-  , testCase "getFileName" $
-      assertEqual "Checking file name" "abc.hs" (T.getFileName "abc")
-
-  , testCase "getFileName" $
-      assertEqual "Checking file name" "abc.html" (T.getFileName "abc.html")
-
-  , testCase "mkJsonContext empty" $ do
+  [ testCase "mkJsonContext empty" $ do
       generated <- hastacheStr defaultConfig "" (T.mkJsonContext "{\"a\":11}")
       assertEqual "Checking generated text" "" generated
 
@@ -62,19 +53,19 @@ simplParamsTests = testGroup "Trurl unit tests"
       assertEqual "Checking parseEmbedded" "" (S.parseEmbedded "abc")
 
   , testCase "parseEmbedded with delimiter" $
-      assertEqual "Checking parseEmbedded" "{\"name\":\"abc\",\"type\":\"efg\"}" (S.parseEmbedded "abc#efg")
+      assertEqual "Checking parseEmbedded" "{\"key\":\"abc\",\"value\":\"efg\"}" (S.parseEmbedded "abc#efg")
 
   , testCase "parseEmbedded with delimiter" $
-      assertEqual "Checking parseEmbedded" "{\"name\":\"abc\",\"type\":\"efg\",\"last\":true}" (S.parseEmbedded "abc#efg@")
+      assertEqual "Checking parseEmbedded" "{\"key\":\"abc\",\"value\":\"efg\",\"last\":true}" (S.parseEmbedded "abc#efg@")
 
   , testCase "simpleParamsToJson" $
       assertEqual "Checking simpleParamsToJson"
-                  "{\"abc\":123,\"efg\":456,\"zxc\":[1,2,3],\"ttt\":[{\"name\":\"abc\",\"type\":\"efg\"},{\"name\":\"hck\",\"type\":\"qwe\"},{\"name\":\"zxc\",\"type\":\"vbn\",\"last\":true}]}"
+                  "{\"abc\":123,\"efg\":456,\"zxc\":[1,2,3],\"ttt\":[{\"key\":\"abc\",\"value\":\"efg\"},{\"key\":\"hck\",\"value\":\"qwe\"},{\"key\":\"zxc\",\"value\":\"vbn\",\"last\":true}]}"
                   (S.simpleParamsToJson "abc:123,efg:456,zxc:[1,2,3],ttt:[abc#efg,hck#qwe,zxc#vbn@]")
 
   , testCase "simple params with a space" $
       assertEqual "Checking simple params with a space"
-                  "{\"props\":[{\"name\":\"cover\",\"type\":\"Text\"}, {\"name\":\"year\",\"type\":\"Integer\",\"last\":true}]}"
+                  "{\"props\":[{\"key\":\"cover\",\"value\":\"Text\"}, {\"key\":\"year\",\"value\":\"Integer\",\"last\":true}]}"
                   (S.simpleParamsToJson "props:[cover#Text, year#Integer@]")
 
   ]
