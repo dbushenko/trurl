@@ -88,8 +88,11 @@ downloadTemplate repoDir (Registry u tname) = do
         mname = tname ++ ".metainfo"
         mFile = repoDir ++ mname
         fullUrl = if endswith "/" u then u else u ++ "/"
+
     putStrLn $ "Fetching " ++ fullUrl ++ tname
     simpleHttp (fullUrl ++ tname) >>= BL.writeFile tFile
+
+    putStrLn $ "Fetching " ++ fullUrl ++ mname
     simpleHttp (fullUrl ++ mname) >>= BL.writeFile mFile
 
 -------------------------------------
@@ -177,4 +180,4 @@ helpTemplate template = do
   repoDir <- getLocalRepoDir
   templExists <- doesFileExist $ repoDir ++ template ++ ".metainfo"
   if templExists then printFile repoDir $ template ++ ".metainfo"
-  else printFile repoDir (template ++ ".metainfo")
+  else printFile repoDir (template ++ ".tar.metainfo")

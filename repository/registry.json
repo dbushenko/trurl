@@ -1,7 +1,24 @@
 [ { "url": "https://github.com/dbushenko/trurl/raw/master/repository/templates/"
   , "templateName": "haskeleton.tar"
   },
+  
   { "url": "https://github.com/dbushenko/trurl/raw/master/repository/templates/"
   , "templateName": "servant.tar"
+  },
+  
+  { "url": "https://github.com/dbushenko/trurl/raw/master/repository/templates/"
+  , "templateName": "srv-json-entity"
+  },
+  
+  { "url": "https://github.com/dbushenko/trurl/raw/master/repository/templates/"
+  , "templateName": "srv-db-entity"
+  },
+  
+  { "url": "https://github.com/dbushenko/trurl/raw/master/repository/templates/"
+  , "templateName": "srv-converter"
+  },
+  
+  { "url": "https://github.com/dbushenko/trurl/raw/master/repository/templates/"
+  , "templateName": "srv-crud"
   }  
 ]
