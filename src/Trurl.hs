@@ -168,7 +168,7 @@ listTemplates :: IO ()
 listTemplates = do
   repoDir <- getLocalRepoDir
   files <- getDirectoryContents repoDir
-  let mpaths = filter (endswith ".metainfo") files
+  let mpaths = filter (endswith ".metainfo") $ sort files
   mapM_ (printFileHeader repoDir) mpaths
 
 -- Команда "help <template>"
