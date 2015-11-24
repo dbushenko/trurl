@@ -1,0 +1,90 @@
+{-# LANGUAGE DataKinds         #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TypeFamilies      #-}
+{-# LANGUAGE TypeOperators     #-}
+
+module Logic.{{entity}} where
+
+import Database.Persist.MySQL
+import Servant
+import Control.Monad.Trans.Either
+import Control.Monad.IO.Class
+import Data.Text hiding (replace, length, any, concat, map, filter)
+import Data.Char
+import Data.Maybe
+import Data.Word
+
+import Auth.DbAuth
+import Db.Common
+import Json.{{entity}} ({{entity}}(..))
+import qualified Json.{{entity}} as Json{{entity}}
+import qualified Db.{{entity}} as Db{{entity}}
+import Json.User (User(..))
+import qualified Json.User as JsonUser
+import qualified Convert.{{entity}}Converter as C
+
+
+create{{entity}} :: ConnectionPool -> String -> Maybe Text -> {{entity}} -> EitherT ServantErr IO ()
+create{{entity}} _ _ Nothing _ = return ()
+create{{entity}} pool salt (Just authHeader) entity =
+    withUser pool authHeader salt $ \user -> do
+        query pool $ insert (C.toRecord entity {user_id = JsonUser.id user} :: Db{{entity}}.{{entity}})
+        return ()
+
+entityBelongsToUser :: MonadIO m => ConnectionPool -> User -> Int -> m Bool
+entityBelongsToUser _ (User {JsonUser.id = Nothing}) _ = return False -- No user id
+entityBelongsToUser pool (User {JsonUser.id = _id}) _bid = do
+    entitys <- query pool $ selectList [Db{{entity}}.{{entity}}User_id ==. _id, Db{{entity}}.{{entity}}Id ==. toKey _bid] []
+    return $ length entitys == 1
+
+update{{entity}} :: ConnectionPool -> String -> Maybe Text -> {{entity}} -> EitherT ServantErr IO ()
+update{{entity}} _ _ Nothing _ = return ()
+update{{entity}} pool salt (Just authHeader) entity =
+    withUser pool authHeader salt $ \user ->
+        case entity of
+            {{entity}} {Json{{entity}}.id = Nothing} -> left $ err400 { errBody = "No id specified!" }
+            {{entity}} {Json{{entity}}.id = Just _id} -> do
+                belongs <- entityBelongsToUser pool user _id
+                if belongs
+                    then do
+                        query pool $ replace (toKey _id :: Key Db{{entity}}.{{entity}})
+                                             (C.toRecord entity {user_id = JsonUser.id user} :: Db{{entity}}.{{entity}})
+                        return ()
+                    else return ()
+
+delete{{entity}} :: ConnectionPool -> String -> Maybe Text -> Int -> EitherT ServantErr IO ()
+delete{{entity}} _ _ Nothing _ = return ()
+delete{{entity}} pool salt (Just authHeader) _id =
+    withUser pool authHeader salt $ \user -> do
+        belongs <- entityBelongsToUser pool user _id
+        if belongs
+            then do
+                query pool $ delete (toKey _id :: Key Db{{entity}}.{{entity}})
+                return ()
+            else return ()
+        
+
+show{{entity}} :: ConnectionPool -> Int -> EitherT ServantErr IO (Maybe {{entity}})
+show{{entity}} pool id = do
+    entity <- query pool $ selectFirst [Db{{entity}}.{{entity}}Id ==. (toKey id :: Key Db{{entity}}.{{entity}})] []
+    return $ maybe{{entity}} entity
+    where maybe{{entity}} Nothing = Nothing
+          maybe{{entity}} (Just b) = C.toJson b
+
+
+select{{entity}}s :: ConnectionPool -> Maybe String -> Maybe String -> Maybe Word16 -> Maybe Word16 -> EitherT ServantErr IO [{{entity}}]
+select{{entity}}s _ Nothing _ _ _= return []
+select{{entity}}s _ _ Nothing _ _ = return []
+select{{entity}}s _ _ _ Nothing _ = return []
+select{{entity}}s _ _ _ _ Nothing = return []
+select{{entity}}s pool (Just field) (Just searchStr) (Just offset) (Just limit) = do
+    let entityField = case field of
+                        "title" -> Db{{entity}}.{{entity}}Title
+                        "author" -> Db{{entity}}.{{entity}}Author
+                        "content" -> Db{{entity}}.{{entity}}Content
+    if any (not . isAlphaNum) searchStr
+        then return []
+        else do
+            entitys <- query pool $ selectList [Filter entityField (Left $ concat ["%", searchStr, "%"]) (BackendSpecificFilter "like")]
+                                            [OffsetBy $ fromIntegral offset, LimitTo $ fromIntegral limit]
+            return $ map (\(Just b) -> b) $ filter isJust $ map C.toJson entitys

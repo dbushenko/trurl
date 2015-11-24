@@ -21,21 +21,23 @@ help = do
   putStrLn "  version -- print version"
 
 printVersion :: IO ()
-printVersion = putStrLn "0.4.0.x"
+printVersion = putStrLn "0.4.1.x"
 
 main :: IO ()
 main = do
   args <- getArgs
   case args of
     []                                      -> help
+    ["--help"]                              -> help
+    ["-h"]                                  -> help
     ["help"]                                -> help
     ["help", template]                      -> helpTemplate template
     ["update"]                              -> updateFromRepository
     ["new", "project", name, project]       -> createProject name project "{}"
     ["new", "project", name, project, "-j", params] -> createProject name project params
-    ("new project": name: project: params)          -> createProject name project $ simpleParamsToJson $ unwords params
+    ["new", "project", name, project, params]       -> createProject name project $ simpleParamsToJson params
     ["new", "file", name, template, "-j" ,params]   -> newTemplate name template params
-    ("new file": name: template: params)    -> newTemplate name template $ simpleParamsToJson $ unwords params
+    ["new", "file", name, template, params] -> newTemplate name template $ simpleParamsToJson params
     ["list"]                                -> listTemplates
     ["version"]                             -> printVersion
     ["--version"]                           -> printVersion

@@ -52,14 +52,8 @@ processTemplate projName paramsStr filePath  = do
   removeFile filePath
   return ()
 
-getFileName :: FilePath -> FilePath
-getFileName template =
-  if hasExtension template
-    then template
-    else template <.> "hs"
-
 getFullFileName :: FilePath -> String -> FilePath
-getFullFileName repoDir template = repoDir ++ getFileName template
+getFullFileName repoDir template = repoDir ++ template
 
 mkJsonContext :: Monad m => String -> MuContext m
 mkJsonContext =
@@ -89,8 +83,9 @@ substituteProjectName projectName filePath  =
    in dirName </> newFileName
 
 downloadTemplate :: String -> Registry -> IO ()
-downloadTemplate repoDir (Registry u tname mname) = do
+downloadTemplate repoDir (Registry u tname) = do
     let tFile = repoDir ++ tname
+        mname = tname ++ ".metainfo"
         mFile = repoDir ++ mname
         fullUrl = if endswith "/" u then u else u ++ "/"
     putStrLn $ "Fetching " ++ fullUrl ++ tname
@@ -160,7 +155,7 @@ newTemplate name tName paramsStr = do
   repoDir <- getLocalRepoDir
   let templPath = getFullFileName repoDir tName
   generated <- hastacheFile defaultConfig templPath (mkFileContext name paramsStr)
-  TL.writeFile (getFileName name) generated
+  TL.writeFile name generated
 
 -- Команда "list"
 -- 1) Найти все файлы с расширением '.metainfo'
@@ -182,4 +177,4 @@ helpTemplate template = do
   repoDir <- getLocalRepoDir
   templExists <- doesFileExist $ repoDir ++ template ++ ".metainfo"
   if templExists then printFile repoDir $ template ++ ".metainfo"
-  else printFile repoDir ((getFileName template) ++ ".metainfo")
+  else printFile repoDir (template ++ ".metainfo")

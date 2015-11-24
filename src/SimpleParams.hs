@@ -10,10 +10,10 @@ import Data.Char
 parseEmbedded :: String -> String
 parseEmbedded str =
   case splitOn "#" str of
-    [name, typ] ->
-      if endswith "@" typ
-        then "{\"name\":\"" ++ name ++ "\",\"type\":\"" ++ replace "@" "" typ ++ "\",\"last\":true}"
-        else "{\"name\":\"" ++ name ++ "\",\"type\":\"" ++ typ ++ "\"}"
+    [k, v] ->
+      if endswith "@" v
+        then "{\"key\":\"" ++ k ++ "\",\"value\":\"" ++ replace "@" "" v ++ "\",\"last\":true}"
+        else "{\"key\":\"" ++ k ++ "\",\"value\":\"" ++ v ++ "\"}"
     _ -> ""
 
 processPart :: String -> String
@@ -26,11 +26,10 @@ processPart str
     symb = headDef ' ' str
 
 simpleParamsToJson :: String -> String
-simpleParamsToJson sparams =
-    "{" ++  concatMap processPart (splitOnSpecialCharacters sparams) ++ "}"
+simpleParamsToJson sparams = "{" ++  concatMap processPart (splitOnSpecialCharacters sparams) ++ "}"
 
 splitOnSpecialCharacters :: String -> [String]
 splitOnSpecialCharacters = split $ dropBlanks $ oneOf specialCharacters
 
-specialCharacters :: [Char]
+specialCharacters :: String
 specialCharacters = ",:[]{} "

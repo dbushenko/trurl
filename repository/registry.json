@@ -1,9 +1,7 @@
-[ { "url": "https://github.com/dbushenko/trurl/raw/master/repository/templates"
+[ { "url": "https://github.com/dbushenko/trurl/raw/master/repository/templates/"
   , "templateName": "haskeleton.tar"
-  , "metainfoName": "haskeleton.metainfo"
   },
-  { "url": "https://github.com/dbushenko/trurl/raw/master/repository/templates"
+  { "url": "https://github.com/dbushenko/trurl/raw/master/repository/templates/"
   , "templateName": "servant.tar"
-  , "metainfoName": "servant.metainfo"
   }  
 ]

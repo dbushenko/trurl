@@ -1,0 +1,34 @@
+module Convert.{{entity}}Converter where
+
+import Prelude hiding (id)
+import GHC.Generics (Generic)
+import qualified Data.Aeson as A
+
+import Database.Persist.MySQL
+import Data.Text
+
+import Db.Common
+import qualified Db.{{entity}} as D
+import Json.{{entity}}
+
+toEntity :: {{entity}} -> Maybe (Entity D.{{entity}})
+toEntity domEntity =
+    case id domEntity of
+        Nothing -> Nothing
+        Just _id -> Just $ Entity (toSqlKey (fromIntegral _id) :: Key D.{{entity}}) $ toRecord domEntity
+
+toRecord :: {{entity}} -> D.{{entity}}
+toRecord ({{entity}} _id{{#fields}} _{{key}}{{/fields}}) = D.{{entity}}{{#fields}} _{{key}}{{/fields}}
+
+toJson :: Entity D.{{entity}} -> Maybe {{entity}}
+toJson (Entity key (D.{{entity}}{{#fields}} _{{key}}{{/fields}})) =
+    let vals = keyToValues key
+    in processKeys vals
+    
+    where processKeys [pval] =
+            let eitherId = fromPersistValue pval :: Either Text Int
+            in case eitherId of
+                Left _ -> Nothing
+                Right _id -> Just $ {{entity}} (Just $ fromIntegral _id){{#fields}} _{{key}}{{/fields}}
+          processKeys _ = Nothing
+

@@ -8,7 +8,6 @@ import GHC.Generics (Generic)
 
 data Registry = Registry { url :: String
                          , templateName :: String
-                         , metainfoName :: String
                          }
   deriving (Show, Generic)                
 

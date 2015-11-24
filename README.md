@@ -46,15 +46,15 @@ Just run 'trurl' to see the help:
 
 Parameters for commands 'new project' and 'new file' may be of two types: JSON and simple string.
 
-* JSON parameters might look like this: '{"entityName": "Article", "params": [ {"name":"title","type":"String"}, {"name":"body", "type":"String"}]}"
+* JSON parameters might look like this: '{"entityName": "Article", "params": [ {"key":"title","value":"String"}, {"key":"body", "value":"String"}]}"
 * Totally the same simple string looks like this: 'entityName:Article, params: [ title#String, body#String ]'
 
 Simple string parameters use following rules to correspond to JSON:
 
 * abc:efg is converted to "abc":"efg"
 * abc:123 is converted to "abc":123
-* abc#efg is converted to {"name":"abc", "type":"efg"} -- this conversion is especially useful when generating object with list of properties.
-* abc#efg@ is converted to {"name":"abc", "type":"efg", "last":true} -- this conversion is needed when generating list of properties and you need to avoid last separator (comma, whitespace, etc).
+* abc#efg is converted to {"key":"abc", "value":"efg"} -- this conversion is especially useful when generating object with list of properties.
+* abc#efg@ is converted to {"key":"abc", "value":"efg", "last":true} -- this conversion is needed when generating list of properties and you need to avoid last separator (comma, whitespace, etc).
 
 For example, if there is a template file 'file1.txt' with following contents:
 
@@ -92,7 +92,7 @@ value1
 All the templates are stored in $HOME/.trurl/repo. There are two types of templates: projects and files.
 
 * Project template is just a tar archive which is unpacked in specified directory. Template files should have extension '.template' and use the same mustache syntax as templates for command 'new'. In any case at least one parameter will be available in project template -- 'ProjectName' which corresponds to the provided <name> parameter. All files named as 'ProjectName' will be renamed according to specified project name. E.g. if creating project 'my' and there is somewhere file 'ProjectName.html' then it will be renamed to 'my.html'.
-* File template is a file in Mustache format. It may have any extension, but if not supplied while running 'trurl new ...' then extension '.hs' will be used.
+* File template is a file in Mustache format.
 
 
 Info about each template is stored in corresponding metainfo file. E.g. if there is template 'file1.hs' then should be also 'file1.hs.metainfo'. First line of the metainfo file is its short description printed by the 'list' command.
