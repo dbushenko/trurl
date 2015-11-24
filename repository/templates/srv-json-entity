@@ -1,0 +1,18 @@
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE DeriveGeneric #-}
+
+module Json.{{entity}} where
+
+import GHC.Generics (Generic)
+import qualified Data.Aeson as A
+
+data {{entity}} = {{entity}} {
+    id       :: Maybe Int
+{{#fields}}
+  , {{key}} :: {{value}}
+{{/fields}}
+  }
+  deriving (Show, Generic)
+
+instance A.ToJSON {{entity}}
+instance A.FromJSON {{entity}}

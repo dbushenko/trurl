@@ -1,0 +1,3 @@
+srv-converter -- [new file] converter of json entity to persistent entity and vice versa
+
+Use it with servant project template.
